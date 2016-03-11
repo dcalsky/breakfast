@@ -63,7 +63,6 @@ class MainSection extends Component {
     const completedCount = todos.reduce((count, todo) => {
       return todo.completed ? count + 1 : count
     }, 0)
-
     return (
       <section className={style.main}>
         {this.renderToggleAll(completedCount)}

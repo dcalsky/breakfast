@@ -1,4 +1,3 @@
-
 import { Router, Route, hashHistory, IndexRoute } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { Provider } from 'react-redux'
@@ -6,6 +5,7 @@ import ReactDOM from 'react-dom'
 import React from 'react'
 
 import App from './containers/App'
+import Todo from './containers/Todo'
 import Home from './containers/Home'
 import Order from './containers/Order'
 import Payment from './containers/Payment'

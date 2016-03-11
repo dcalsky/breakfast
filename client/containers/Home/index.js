@@ -2,19 +2,18 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Header from '../../components/Header'
-import MainSection from '../../components/MainSection'
-import * as TodoActions from '../../actions/todos'
+import * as FoodActions from '../../actions/foods'
+import * as TypeActions from '../../actions/types'
 import style from './style.css'
 
 class App extends Component {
   render() {
-    const { todos, actions, children } = this.props
+    const { types, handleType, children } = this.props
+    console.log(this.props)
     return (
-      <div className={style.normal}>
-        <Header addTodo={actions.addTodo} />
-        <MainSection todos={todos} actions={actions} />
-        {children}
+      <div>
+        Home
+        <button onClick={e=>{handleType.getTypes()}}>123</button>
       </div>
     )
   }
@@ -22,13 +21,15 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos
+    foods: state.foods,
+    types: state.types
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(TodoActions, dispatch)
+    handleFood: bindActionCreators(FoodActions, dispatch),
+    handleType: bindActionCreators(TypeActions, dispatch)
   }
 }
 

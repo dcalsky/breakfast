@@ -6,7 +6,7 @@ var path = require('path')
 
 module.exports = {
   entry: {
-    jsx: './client/index.js',
+    jsx: ['webpack-dev-server/client?http://0.0.0.0:3000', 'webpack/hot/only-dev-server', './client/index.js'],
     vendor: ['react']
   },
   output: {
@@ -55,6 +55,7 @@ module.exports = {
     })
   ],
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     new HtmlWebpackPlugin({
       template: './client/index.html',

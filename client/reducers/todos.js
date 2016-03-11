@@ -21,6 +21,7 @@ export default handleActions({
   },
 
   'edit todo' (state, action) {
+    console.log(action)
     return state.map(todo => {
       return todo.id === action.payload.id
         ? { ...todo, text: action.payload.text }
