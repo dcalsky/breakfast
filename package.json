@@ -41,6 +41,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "asyncawait": "^1.0.3",
-    "avoscloud-sdk": "^0.6.9"
+    "avoscloud-sdk": "^0.6.9",
+    "redux-thunk": "^2.0.1"
   }
 }

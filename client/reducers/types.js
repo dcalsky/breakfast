@@ -12,9 +12,8 @@ const initialState = []
 
 export default handleActions({
   'get types' (state, action) {
-    getTypes(result => {
-      const types = result
+    getTypes().then(result => {
+      console.log(result)
     })
-    return types
   }
 }, initialState)

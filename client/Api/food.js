@@ -11,14 +11,13 @@ const find = (query, callback) => {
   })
 }
 
-export const getFoods = (type, callback) => {
+export const getFoods = (type) => {
   const query = new AV.Query('Food')
   query.equalTo('type', type).limit(10)
   find(query, callback)
 
 }
 
-export const getTypes = callback => {
-  const query = new AV.Query('Type')
-  find(query, callback)
+export const getTypes = () => {
+  return new AV.Query('Type').find()
 }
