@@ -4,16 +4,29 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as FoodActions from '../../actions/foods'
 import * as TypeActions from '../../actions/types'
+import { getTypes } from '../../Api/food'
 import style from './style.css'
 
-class App extends Component {
+
+
+class Home extends Component {
+  constructor(props) {
+    super(props)
+    this.getTypes()
+  }
+  getTypes() {
+    getTypes().then(result => {
+      this.props.handleType.syncTypes(result)
+    })
+  }
   render() {
-    const { types, handleType, children } = this.props
-    console.log(this.props)
     return (
       <div>
-        Home
-        <button onClick={e=>{handleType.getTypes()}}>123</button>
+        {this.props.types.map((type, i) => {
+          return (
+            <li key={i}>{type.attributes.name}</li>
+          )
+        })}
       </div>
     )
   }
@@ -36,4 +49,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
+)(Home)

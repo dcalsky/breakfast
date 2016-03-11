@@ -1,5 +1,4 @@
 import { handleActions } from 'redux-actions'
-import { getTypes }  from '../Api/food'
 
 // Template of food
 
@@ -11,9 +10,7 @@ import { getTypes }  from '../Api/food'
 const initialState = []
 
 export default handleActions({
-  'get types' (state, action) {
-    getTypes().then(result => {
-      console.log(result)
-    })
+  'sync types' (state, action) {
+    return action.payload
   }
 }, initialState)

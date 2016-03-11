@@ -1,3 +1,3 @@
 import { createAction } from 'redux-actions'
 
-export const getTypes = createAction('get types')
+export const syncTypes = createAction('sync types')
