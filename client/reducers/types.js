@@ -7,10 +7,23 @@ import { handleActions } from 'redux-actions'
 //  name: ''
 //}]
 
-const initialState = []
+const initialState = {content: [{
+  attributes: {
+    name: '热销',
+    no: 13
+  }
+}, {
+  attributes: {
+    name: '全部',
+    no: 14
+  }
+}], active: 13}
 
 export default handleActions({
   'sync types' (state, action) {
-    return action.payload
+    return {
+      content: initialState.content.concat(action.payload),
+      active: 13
+    }
   }
 }, initialState)

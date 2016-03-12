@@ -1,3 +1,4 @@
+
 import { Router, Route, hashHistory, IndexRoute } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { Provider } from 'react-redux'

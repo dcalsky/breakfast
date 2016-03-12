@@ -15,10 +15,7 @@ import { getFoods }  from '../Api/food'
 const initialState = []
 
 export default handleActions({
-  'get food' (state, action) {
-    getTypes(result => {
-      console.log(result)
-    })
-    return (state)
+  'sync foods' (state, action) {
+    return action.payload
   }
 }, initialState)

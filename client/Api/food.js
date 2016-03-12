@@ -14,8 +14,7 @@ const find = (query, callback) => {
 export const getFoods = (type) => {
   const query = new AV.Query('Food')
   query.equalTo('type', type).limit(10)
-  find(query, callback)
-
+  return query.find()
 }
 
 export const getTypes = () => {

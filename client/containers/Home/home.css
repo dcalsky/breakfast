@@ -1,0 +1,7 @@
+li .active {
+    color: red
+}
+
+.type-list {
+    list-style: none;
+}

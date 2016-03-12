@@ -10,7 +10,7 @@ export default function configure(initialState) {
     : createStore
 
   const createStoreWithMiddleware = applyMiddleware(
-    logger,
+    logger
   )(create)
 
   const store = createStoreWithMiddleware(rootReducer, initialState)
