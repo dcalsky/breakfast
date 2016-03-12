@@ -6,7 +6,8 @@ export default React.createClass({
   render() {
     return (
       <div className="cart">
-        Cart
+        count: {this.props.cart.count}
+        total: {this.props.cart.total}
       </div>
     )
   }

@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as FoodActions from '../../actions/foods'
 import * as TypeActions from '../../actions/types'
+import * as CartActions from '../../actions/cart'
 import { modifyTitle } from '../../actions/common'
 import { getTypes, getFoods } from '../../Api/food'
 import TypeList from '../../components/TypeList'
@@ -30,17 +31,17 @@ class Home extends Component {
     this.props.handleType.selectType(type)
   }
   render() {
-    const {types, foods} = this.props
+    const {types, foods, cart} = this.props
     return (
       <div className="home">
         <div className="home-type">
           <TypeList types={types.content} active={types.active} handleSelectType={::this.handleSelectType} />
         </div>
         <div className="home-food">
-          <FoodList foods={foods} />
+          <FoodList foods={foods} addFood={this.props.handleCart.addFood}  removeFood={this.props.handleCart.removeFood} cart={cart} />
         </div>
         <div className="home-cart">
-          <Cart />
+          <Cart cart={cart}/>
         </div>
       </div>
     )
@@ -50,7 +51,8 @@ class Home extends Component {
 function mapStateToProps(state) {
   return {
     foods: state.foods,
-    types: state.types
+    types: state.types,
+    cart: state.cart
   }
 }
 
@@ -58,7 +60,8 @@ function mapDispatchToProps(dispatch) {
   return {
     handleFood: bindActionCreators(FoodActions, dispatch),
     handleType: bindActionCreators(TypeActions, dispatch),
-    modifyTitle: bindActionCreators(modifyTitle, dispatch)
+    modifyTitle: bindActionCreators(modifyTitle, dispatch),
+    handleCart: bindActionCreators(CartActions, dispatch)
   }
 }
 

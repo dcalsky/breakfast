@@ -10,8 +10,8 @@ export default React.createClass({
           return (
           <li
             key={i}
-            className={cx({'type-active': type.attributes.no === this.props.active})}
-            onClick={()=>{this.props.handleSelectType(type.attributes.no)}}>
+            className={cx({'type-active': type.id === this.props.active})}
+            onClick={()=>{this.props.handleSelectType(type.id)}}>
             {type.attributes.name}
           </li>)
         })}
