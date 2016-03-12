@@ -1,15 +1,24 @@
 
 import React, { Component } from 'react'
+import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { modifyTitle } from '../../actions/common'
+import CartList from '../../components/CartList'
 import style from './style.css'
 
-class App extends Component {
-  render() {
-    const { todos, actions, children } = this.props
-    return (
-      <div className={style.normal}>
+class Order extends Component {
+  handleBack() {
+    hashHistory.goBack()
+  }
 
+  render() {
+    const { cart } = this.props
+    return (
+      <div>
+        order
+        <button onClick={::this.handleBack}>Go back</button>
+        <CartList cart={cart} />
       </div>
     )
   }
@@ -17,17 +26,17 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos
+    cart: state.cart
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(TodoActions, dispatch)
+
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
+)(Order)

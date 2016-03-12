@@ -5,29 +5,14 @@ import { connect } from 'react-redux'
 
 export class App extends Component {
   render() {
-    console.log(this.props)
     return (
       <app>
-        <Header title={this.props.title}/>
+        <Header path={this.props.location.pathname}/>
         {this.props.children}
       </app>
     )
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    title: state.common.title
-  }
-}
 
-function mapDispatchToProps(dispatch) {
-  return {
-
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+export default connect()(App)
