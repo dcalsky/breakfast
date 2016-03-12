@@ -7,6 +7,9 @@ import * as FoodActions from '../../actions/foods'
 import * as TypeActions from '../../actions/types'
 import { modifyTitle } from '../../actions/common'
 import { getTypes, getFoods } from '../../Api/food'
+import TypeList from '../../components/TypeList'
+import FoodList from '../../components/FoodList'
+import Cart from '../../components/Cart'
 import './home.css'
 
 class Home extends Component {
@@ -23,15 +26,22 @@ class Home extends Component {
       this.props.handleFood.syncFoods(result)
     })
   }
+  handleSelectType(type) {
+    this.props.handleType.selectType(type)
+  }
   render() {
     const {types, foods} = this.props
     return (
-      <div className="type-list">
-        {this.props.types.content.map((type, i) => {
-          return (
-            <li key={i} className={cx({'active': type.attributes.no === this.props.types.active})}>{type.attributes.name}</li>
-          )
-        })}
+      <div className="home">
+        <div className="home-type">
+          <TypeList types={types.content} active={types.active} handleSelectType={::this.handleSelectType} />
+        </div>
+        <div className="home-food">
+          <FoodList foods={foods} />
+        </div>
+        <div className="home-cart">
+          <Cart />
+        </div>
       </div>
     )
   }

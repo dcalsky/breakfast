@@ -25,5 +25,11 @@ export default handleActions({
       content: initialState.content.concat(action.payload),
       active: 13
     }
+  },
+  'select type' (state, action) {
+    return {
+      content: state.content,
+      active: action.payload
+    }
   }
 }, initialState)
