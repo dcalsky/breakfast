@@ -9,20 +9,11 @@ const initialState = Immutable.fromJS({
   total: 0
 })
 
-// correct to two decimal places
-const toDecimal = x => {
-  var f = parseFloat(x)
-  if (isNaN(f)) {
-    return
-  }
-  f = Math.round(x * 100) / 100
-  return f
-}
 
 export default handleActions({
   'add food' (state, action) {
     const i = _.findIndex(state.get('foods').toJS(), {id: action.payload.id})
-    const total = toDecimal(state.get('total') + action.payload.price)
+    const total = _.round((state.get('total') + action.payload.price), 1)
     if( i === -1 ) {
       return state.merge({
         count:  state.get('count') + 1,
@@ -41,7 +32,7 @@ export default handleActions({
   },
   'remove food' (state, action) {
     const i = _.findIndex(state.get('foods').toJS(), {id: action.payload.id})
-    const total = toDecimal(state.get('total') - action.payload.price)
+    const total = _.round((state.get('total') - action.payload.price), 1)
     let preFoods = state.get('foods').toJS()
     if( i !== -1 && preFoods[i].count > 0) {
       return state.merge({
