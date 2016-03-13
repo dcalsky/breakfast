@@ -26,7 +26,7 @@ class Order extends Component {
 
 function mapStateToProps(state) {
   return {
-    cart: state.cart
+    cart: state.get('cart').toJS()
   }
 }
 

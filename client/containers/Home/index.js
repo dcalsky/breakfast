@@ -29,11 +29,13 @@ class Home extends Component {
     this.props.handleType.selectType(type)
   }
   skipToOrder() {
-    hashHistory.push('/order')
+    const cart = this.props.cart
+    if(cart.total > 0 && cart.count > 0) {
+      hashHistory.push('/order')
+    }
   }
   render() {
     const {types, foods, cart} = this.props
-    console.log(this.props)
     return (
       <div className="home">
         <button onClick={::this.skipToOrder}>Go Order</button>
@@ -54,7 +56,7 @@ class Home extends Component {
 function mapStateToProps(state) {
   return {
     foods: state.get('foods'),
-    types: state.get('types').toJS(),
+    types: state.get('types'),
     cart: state.get('cart').toJS()
   }
 }

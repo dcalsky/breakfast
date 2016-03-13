@@ -52,7 +52,7 @@ export default handleActions({
             food.count --
           }
           return food
-        }))
+        }).filter(food => food.count !== 0))
       })
     } else {
       return state

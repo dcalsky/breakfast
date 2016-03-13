@@ -2,29 +2,27 @@ import { handleActions } from 'redux-actions'
 import Immutable from 'immutable'
 
 // Template of food
-
-//const initialState = [{
-//  id: 1,
-//  name: ''
-//}]
-
-const initialState = Immutable.fromJS({content: [{
-  id: 'hot',
-  attributes: {
-    name: '热销',
-  }
-}], active: 'hot'})
+const initialState = {
+  active: 'hot',
+  content: [{
+    id: 'hot',
+    attributes: {
+      name: '热销'
+    }
+  }]
+}
 
 export default handleActions({
   'sync types' (state, action) {
-    return state.merge({
-      active: 'hot'
-    })
+    return {
+      active: 'hot',
+      content: initialState.content.concat(action.payload)
+    }
   },
   'select type' (state, action) {
-    return state.merge({
-      content: state.get('content'),
+    return {
+      content: state.content,
       active: action.payload
-    })
+    }
   }
 }, initialState)
