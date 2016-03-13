@@ -3,6 +3,7 @@ import _ from 'lodash'
 
 export default React.createClass({
   render() {
+    console.log(this.props.cart.foods)
     return (
       <ul className="cart-list">
         {this.props.cart.foods.map((food, i) => {

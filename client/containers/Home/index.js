@@ -16,7 +16,6 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.init()
-    console.log(this.props)
   }
   init() {
     getTypes().then(result => {
@@ -34,6 +33,7 @@ class Home extends Component {
   }
   render() {
     const {types, foods, cart} = this.props
+    console.log(this.props)
     return (
       <div className="home">
         <button onClick={::this.skipToOrder}>Go Order</button>
@@ -53,9 +53,9 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    foods: state.foods,
-    types: state.types,
-    cart: state.cart
+    foods: state.get('foods'),
+    types: state.get('types').toJS(),
+    cart: state.get('cart').toJS()
   }
 }
 

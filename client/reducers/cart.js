@@ -1,12 +1,13 @@
 import { handleActions } from 'redux-actions'
+import Immutable from 'immutable'
 import _ from 'lodash'
 
 // Template of carts
-const initialState = {
+const initialState = Immutable.fromJS({
   foods: [],
   count: 0,
   total: 0
-}
+})
 
 // correct to two decimal places
 const toDecimal = x => {
@@ -20,35 +21,39 @@ const toDecimal = x => {
 
 export default handleActions({
   'add food' (state, action) {
-    let i = _.findIndex(state.foods, {id: action.payload.id})
-    let _foods = state.foods
+    const i = _.findIndex(state.get('foods').toJS(), {id: action.payload.id})
+    const total = toDecimal(state.get('total') + action.payload.price)
     if( i === -1 ) {
-      _foods.push({
-        id: action.payload.id,
-        count: 1
+      return state.merge({
+        count:  state.get('count') + 1,
+        total: total,
+        foods: state.get('foods').push(Immutable.fromJS({id: action.payload.id, count: 1}))
       })
     } else {
-      _foods[i].count++
-    }
-    return {
-      count: state.count + 1,
-      total: toDecimal(state.total + action.payload.price),
-      foods: _foods
+      let preFoods = state.get('foods').toJS()
+      preFoods[i].count++
+      return state.merge({
+        count: state.get('count') + 1,
+        foods: Immutable.fromJS(preFoods),
+        total: total
+      })
     }
   },
   'remove food' (state, action) {
-    let i = _.findIndex(state.foods, {id: action.payload.id})
-    if( i !== -1 && state.foods[i].count > 0) {
-      return {
-        count: state.count - 1,
-        total: toDecimal(state.total - action.payload.price),
-        foods: state.foods.map(food => {
+    const i = _.findIndex(state.get('foods').toJS(), {id: action.payload.id})
+    const total = toDecimal(state.get('total') - action.payload.price)
+    let preFoods = state.get('foods').toJS()
+    if( i !== -1 && preFoods[i].count > 0) {
+      return state.merge({
+        count: state.get('count') - 1,
+        total: total,
+        foods: Immutable.fromJS(preFoods.map(food => {
           if(food.id === action.payload.id){
             food.count --
           }
           return food
-        })
-      }
+        }))
+      })
     } else {
       return state
     }

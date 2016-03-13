@@ -45,6 +45,9 @@
     "classnames": "^2.2.3",
     "immutable": "^3.7.6",
     "lodash": "^4.6.1",
-    "redux-thunk": "^2.0.1"
+    "redux-immutable": "^3.0.6",
+    "redux-immutablejs": "0.0.8",
+    "redux-thunk": "^2.0.1",
+    "seamless-immutable": "^5.1.0"
   }
 }
