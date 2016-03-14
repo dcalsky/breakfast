@@ -34,11 +34,20 @@ class Home extends Component {
       hashHistory.push('/order')
     }
   }
+  skipToLogin() {
+    const user = this.props.user
+    console.log(user)
+    if(Object.keys(user).length !== 0 && !user.hadLogin) {
+      hashHistory.push('/login')
+    }
+  }
   render() {
     const {types, foods, cart} = this.props
     return (
       <div className="home">
+        Home
         <button onClick={::this.skipToOrder}>Go Order</button>
+        <button onClick={::this.skipToLogin}>Go Login</button>
         <div className="home-type">
           <TypeList types={types.content} active={types.active} handleSelectType={::this.handleSelectType} />
         </div>
@@ -57,7 +66,8 @@ function mapStateToProps(state) {
   return {
     foods: state.get('foods'),
     types: state.get('types'),
-    cart: state.get('cart').toJS()
+    cart: state.get('cart').toJS(),
+    user: state.get('user').toJS()
   }
 }
 

@@ -9,6 +9,7 @@ import App from './containers/App'
 import Todo from './containers/Todo'
 import Home from './containers/Home'
 import Order from './containers/Order'
+import Login from './containers/Login'
 import Payment from './containers/Payment'
 import configure from './store'
 
@@ -21,6 +22,7 @@ ReactDOM.render(
       <Route path="/" component={App} >
         <Route path="/order" component={Order} />
         <Route path="/payment" component={Payment} />
+        <Route path="/login" component={Login} />
         <IndexRoute component={Home} />
       </Route>
     </Router>
