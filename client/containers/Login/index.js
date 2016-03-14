@@ -9,29 +9,59 @@ import style from './style.css'
 class Login extends Component {
   constructor(props) {
     super(props)
-    this.state = Immutable.fromJS({
+    this.state = {
       username: '',
       password: ''
-    })
+    }
   }
   handleBack() {
     hashHistory.goBack()
   }
   handleInputChange(type, e) {
-    const prevState = this.state
-
-    console.log(prevState.get('username'))
-    this.setState(prevState.set(type, e.target.value))
+    switch (type) {
+      case 'username':
+        this.setState({
+          username: e.target.value,
+          password: this.state.password
+        })
+        break
+      case 'password':
+        this.setState({
+          username: this.state.username,
+          password: e.target.value
+        })
+        break
+    }
   }
+  handleLogin() {
 
+  }
+  handleGetKey() {
+
+  }
   render() {
     const { user } = this.props
+    const type = this.props.params.type
     return (
       <div>
         Login
         <button onClick={::this.handleBack}>Go back</button>
-        <input type="text" value={this.state.get('username')} onChange={this.handleInputChange.bind(this, 'username')} />
-        <input type="text" value={this.state.get('password')} onChange={this.handleInputChange.bind(this, 'password')} />
+        <button onClick={::this.handleGetKey}>Get Key</button>
+        {
+          type === 'phone' ?
+            <div className="login-phone">
+              phone
+              <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} />
+            </div>
+            :
+            <div className="login-normal">
+              <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} />
+              <input type="text" value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} />
+              <button >Login</button>
+              <button >Register</button>
+            </div>
+        }
+
       </div>
     )
   }
