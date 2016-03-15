@@ -1,24 +1,23 @@
 
 import React, { Component } from 'react'
+import moment from 'moment'
 import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import { createOrder } from '../../Api/order'
 import CartList from '../../components/CartList'
+import DatePicker from 'react-datepicker'
 import style from './style.css'
-import './react-select.css'
+import './react-datepicker.css'
 
-const options = [
-  { value: 'one', label: 'One' },
-  { value: 'two', label: 'Two' }
-];
+const finalTime = 22
 
 class Order extends Component {
   constructor(props) {
     super(props)
+    this.minStartDay = moment().hour() < finalTime ? 1 : 2
     this.state = {
-      date: options[0].value
+      startDate: null
     }
   }
   handleBack() {
@@ -30,7 +29,7 @@ class Order extends Component {
   }
   handleChangeDate(val) {
     this.setState({
-      date: val
+      startDate: val
     })
   }
   render() {
@@ -41,6 +40,15 @@ class Order extends Component {
         <button onClick={::this.handleBack}>Go back</button>
         <CartList cart={cart} />
         起送时间:
+        <DatePicker
+          selected={this.state.startDate}
+          onChange={::this.handleChangeDate}
+          minDate={moment().add(this.minStartDay, 'days')}
+          maxDate={moment().add(29, 'days')}
+          placeholderText="Select a date between today and 5 days in the future" />
+
+        03/16/2016
+
         <button onClick={::this.handleCreateOrder}>Create Order</button>
       </div>
     )

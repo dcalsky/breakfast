@@ -7,7 +7,7 @@ var path = require('path')
 module.exports = {
   entry: {
     jsx: ['webpack-dev-server/client?http://0.0.0.0:3001', 'webpack/hot/only-dev-server', './client/index.js'],
-    vendor: ['react']
+    vendor: ['react', 'redux', 'moment', 'lodash', 'react-router']
   },
   output: {
     filename: 'bundle.js'

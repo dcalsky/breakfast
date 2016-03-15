@@ -7,7 +7,7 @@ module.exports = {
   context: path.join(__dirname, './client'),
   entry: {
     app: './index.js',
-    vendor: ['react']
+    vendor: ['react', 'redux', 'moment', 'lodash', 'react-router']
   },
   output: {
     path: path.join(__dirname, './static'),
@@ -48,8 +48,15 @@ module.exports = {
   ],
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[hash].js'),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development') }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
     }),
     new HtmlWebpackPlugin({
       template: './index.html',
