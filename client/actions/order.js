@@ -1,3 +1,3 @@
 import { createAction } from 'redux-actions'
 
-export const submitOrder = createAction('submit order')
+export const createOrder = createAction('create order')

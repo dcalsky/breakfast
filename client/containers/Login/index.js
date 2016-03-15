@@ -65,6 +65,13 @@ class Login extends Component {
   handleGetKey() {
     getKey(this.state.username)
   }
+  switchMode() {
+    if(this.props.params.type === 'phone') {
+      hashHistory.push('/login')
+    } else {
+      hashHistory.push('/login/phone')
+    }
+  }
   render() {
     const { user } = this.props
     const type = this.props.params.type
@@ -72,6 +79,7 @@ class Login extends Component {
       <div>
         Login
         <button onClick={::this.handleBack}>Go back</button>
+        <button onClick={::this.switchMode}>Switch mode</button>
         {
           type === 'phone' ?
             <div className="login-phone">

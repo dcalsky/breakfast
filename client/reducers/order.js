@@ -4,7 +4,7 @@ const initialState = {}
 
 
 export default handleActions({
-  'submit order' (state, action) {
+  'create order' (state, action) {
     return state
   }
 }, initialState)
