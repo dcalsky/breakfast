@@ -7,7 +7,7 @@ const initialState = Immutable.fromJS({
   name: null,
   floor: null,
   room: null,
-  phone: null,
+  mobilePhoneNumber: null,
   orders: [],
   hadLogin: false
 })

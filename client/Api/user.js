@@ -1,14 +1,21 @@
 import AV from 'avoscloud-sdk'
 // todo[1]: all mistakes should be added
 // todo[2]: all action trigger before checking hadLogin property
-AV.initialize('puVuQSL2x1iceX0V99MXST4p-gzGzoHsz', 'JezXUL3qvLQB04w5vlKbl6Q3')
-
-export const getKey = phone => {
-  // getKey
-}
 
 export const login = (username, password) => {
-  // login
+    return AV.User.logIn(username, password)
+}
+
+export const loginWithPhone = (phone, key) => {
+
+}
+
+export const getKey = phone => {
+   AV.Cloud.requestSmsCode(phone).then(function() {
+     console.log('success')
+   }, function(err) {
+
+   });
 }
 
 export const register = (username, password) => {

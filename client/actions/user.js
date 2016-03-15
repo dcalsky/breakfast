@@ -1,5 +1,7 @@
 import { createAction } from 'redux-actions'
 
+
+export const syncUser = createAction('sync user')
 export const login = createAction('login')
 export const register = createAction('register')
 export const logout = createAction('logout')

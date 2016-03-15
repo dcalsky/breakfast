@@ -44,6 +44,7 @@
     "avoscloud-sdk": "^0.6.9",
     "classnames": "^2.2.3",
     "immutable": "^3.7.6",
+    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.6.1",
     "redux-immutable": "^3.0.6",
     "redux-immutablejs": "0.0.8",

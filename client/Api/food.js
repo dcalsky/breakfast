@@ -1,7 +1,6 @@
 import AV from 'avoscloud-sdk'
+import { Food } from './init'
 // todo[1]: all mistakes should be added
-
-AV.initialize('puVuQSL2x1iceX0V99MXST4p-gzGzoHsz', 'JezXUL3qvLQB04w5vlKbl6Q3')
 
 export const getFoods = (type) => {
   const query = new AV.Query('Food')

@@ -36,7 +36,6 @@ class Home extends Component {
   }
   skipToLogin() {
     const user = this.props.user
-    console.log(user)
     if(Object.keys(user).length !== 0 && !user.hadLogin) {
       hashHistory.push('/login')
     }
@@ -75,8 +74,7 @@ function mapDispatchToProps(dispatch) {
   return {
     handleFood: bindActionCreators(FoodActions, dispatch),
     handleType: bindActionCreators(TypeActions, dispatch),
-    handleCart: bindActionCreators(CartActions, dispatch),
-    dispatch
+    handleCart: bindActionCreators(CartActions, dispatch)
   }
 }
 
