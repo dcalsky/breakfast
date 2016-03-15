@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Immutable from 'immutable'
-import { login, register } from '../../Api/user'
+import { login, register, loginWithPhone, getKey } from '../../Api/user'
 import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -12,7 +12,8 @@ class Login extends Component {
     super(props)
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      key: null
     }
   }
   handleBack() {
@@ -32,10 +33,27 @@ class Login extends Component {
           password: e.target.value
         })
         break
+      case 'key':
+        this.setState({
+          key: e.target.value
+        })
+        break
     }
   }
-  handleLogin() {
-    login('1453937', '260013').then(result => {
+  handleLogin(type) {
+    let event
+    switch (type) {
+      case 'register':
+        event = register(this.state.username, this.state.password)
+        break
+      case 'loginWithPhone':
+        event = loginWithPhone(this.state.username, this.state.key)
+        break
+      default:
+        event = login('1453937', '260013')
+        break
+    }
+    event.then(result => {
       let info = _.mapKeys(result.attributes, function(value, key) {
           return key
       })
@@ -45,29 +63,30 @@ class Login extends Component {
     })
   }
   handleGetKey() {
-
+    getKey(this.state.username)
   }
   render() {
     const { user } = this.props
-    console.log(user)
     const type = this.props.params.type
     return (
       <div>
         Login
         <button onClick={::this.handleBack}>Go back</button>
-        <button onClick={::this.handleGetKey}>Get Key</button>
         {
           type === 'phone' ?
             <div className="login-phone">
               phone
               <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} />
+              <input type="text" value={this.state.key} onChange={this.handleInputChange.bind(this, 'key')} />
+              <button onClick={::this.handleGetKey}>Get Key</button>
+              <button onClick={::this.handleLogin.bind(this, 'loginWithPhone')}>Login</button>
             </div>
             :
             <div className="login-normal">
               <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} />
               <input type="text" value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} />
-              <button onClick={::this.handleLogin}>Login</button>
-              <button >Register</button>
+              <button onClick={::this.handleLogin.bind(this, 'login')}>Login</button>
+              <button onClick={::this.handleLogin.bind(this, 'register')}>Register</button>
             </div>
         }
         <li>username: {user.username}</li>

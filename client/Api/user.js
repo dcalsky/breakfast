@@ -6,20 +6,20 @@ export const login = (username, password) => {
     return AV.User.logIn(username, password)
 }
 
-export const loginWithPhone = (phone, key) => {
-
+export const loginWithPhone = (phone, key, password) => {
+  var user = new AV.User();
+  return user.signUpOrlogInWithMobilePhone({
+    mobilePhoneNumber: phone,
+    smsCode: key
+  })
 }
 
 export const getKey = phone => {
-   AV.Cloud.requestSmsCode(phone).then(function() {
-     console.log('success')
-   }, function(err) {
-
-   });
+   AV.Cloud.requestSmsCode(phone)
 }
 
 export const register = (username, password) => {
-  // register
+  return AV.User.signUp(username, password)
 }
 
 //export const updateInfo = (username, newInfo) => {
