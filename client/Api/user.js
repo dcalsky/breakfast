@@ -18,6 +18,10 @@ export const getKey = phone => {
    AV.Cloud.requestSmsCode(phone)
 }
 
+export const getCurrentUser = () => {
+  return AV.User.current()
+}
+
 export const register = (username, password) => {
   return AV.User.signUp(username, password)
 }

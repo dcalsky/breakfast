@@ -58,7 +58,6 @@ class Login extends Component {
           return key
       })
       info.token = result._sessionToken
-      console.log(info)
       this.props.handleUser.login(info)
     })
   }

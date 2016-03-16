@@ -12,10 +12,16 @@ import { getFoods }  from '../Api/food'
 //  onSale: false
 //}]
 
-const initialState = []
+const initialState = {
+  loaded: false,
+  content: []
+}
 
 export default handleActions({
   'sync foods' (state, action) {
-    return action.payload
+    return {
+      loaded: true,
+      content: action.payload
+    }
   }
 }, initialState)

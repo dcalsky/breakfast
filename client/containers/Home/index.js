@@ -6,7 +6,9 @@ import { connect } from 'react-redux'
 import * as FoodActions from '../../actions/foods'
 import * as TypeActions from '../../actions/types'
 import * as CartActions from '../../actions/cart'
+import * as UserActions from '../../actions/user'
 import { getTypes, getFoods } from '../../Api/food'
+import { getCurrentUser } from '../../Api/user'
 import TypeList from '../../components/TypeList'
 import FoodList from '../../components/FoodList'
 import Cart from '../../components/Cart'
@@ -18,12 +20,24 @@ class Home extends Component {
     this.init()
   }
   init() {
-    getTypes().then(result => {
-      this.props.handleType.syncTypes(result)
-    })
-    getFoods().then(result => {
-      this.props.handleFood.syncFoods(result)
-    })
+    const currentUser = getCurrentUser()
+    if(!this.props.foods.loaded) {
+      getFoods().then(result => {
+        this.props.handleFood.syncFoods(result)
+      })
+    }
+    if(!this.props.types.loaded) {
+      getTypes().then(result => {
+        this.props.handleType.syncTypes(result)
+      })
+    }
+    if(currentUser && !this.props.user.hadLogin) {
+      let info = _.mapKeys(currentUser.attributes, function(value, key) {
+        return key
+      })
+      info.token = currentUser._sessionToken
+      this.props.handleUser.login(info)
+    }
   }
   handleSelectType(type) {
     this.props.handleType.selectType(type)
@@ -51,7 +65,7 @@ class Home extends Component {
           <TypeList types={types.content} active={types.active} handleSelectType={::this.handleSelectType} />
         </div>
         <div className="home-food">
-          <FoodList foods={foods} addFood={this.props.handleCart.addFood}  removeFood={this.props.handleCart.removeFood} cart={cart} />
+          <FoodList foods={foods.content} addFood={this.props.handleCart.addFood}  removeFood={this.props.handleCart.removeFood} cart={cart} />
         </div>
         <div className="home-cart">
           <Cart cart={cart}/>
@@ -74,7 +88,8 @@ function mapDispatchToProps(dispatch) {
   return {
     handleFood: bindActionCreators(FoodActions, dispatch),
     handleType: bindActionCreators(TypeActions, dispatch),
-    handleCart: bindActionCreators(CartActions, dispatch)
+    handleCart: bindActionCreators(CartActions, dispatch),
+    handleUser: bindActionCreators(UserActions, dispatch)
   }
 }
 

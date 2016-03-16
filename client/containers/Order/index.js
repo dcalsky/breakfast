@@ -5,6 +5,7 @@ import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { createOrder } from '../../Api/order'
+import { getCurrentUser } from '../../Api/user'
 import CartList from '../../components/CartList'
 import DatePicker from 'react-datepicker'
 import style from './style.css'
@@ -15,22 +16,41 @@ const finalTime = 22
 class Order extends Component {
   constructor(props) {
     super(props)
+    if(!getCurrentUser()) hashHistory.push('/login')
+    if(Object.keys(this.props.cart.foods).length === 0) hashHistory.push('/')
     this.minStartDay = moment().hour() < finalTime ? 1 : 2
     this.state = {
-      startDate: null
+      startDate: moment().add(this.minStartDay, 'days'),
+      endDate: moment().add(this.minStartDay + 1, 'days')
     }
   }
   handleBack() {
-    hashHistory.goBack()
+    hashHistory.push('/')
   }
   handleCreateOrder() {
     const { cart } = this.props
-    createOrder(cart.total, cart.foods)
+    createOrder(cart.total, cart.foods, this.state.startDate, this.state.endDate)
   }
-  handleChangeDate(val) {
-    this.setState({
-      startDate: val
-    })
+  handleDateChange({ startDate, endDate }) {
+  startDate = startDate || this.state.startDate
+  endDate = endDate || this.state.endDate
+  if (startDate.isAfter(endDate)) {
+    let temp = startDate
+    startDate = endDate
+    endDate = temp
+  }
+  this.setState({ startDate, endDate })
+}
+
+  handleChangeStart(startDate) {
+    this.handleDateChange({ startDate })
+  }
+
+  handleChangeEnd(endDate) {
+    this.handleDateChange({ endDate })
+  }
+  handleChangeInput() {
+
   }
   render() {
     const { cart } = this.props
@@ -42,12 +62,20 @@ class Order extends Component {
         起送时间:
         <DatePicker
           selected={this.state.startDate}
-          onChange={::this.handleChangeDate}
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
           minDate={moment().add(this.minStartDay, 'days')}
-          maxDate={moment().add(29, 'days')}
-          placeholderText="Select a date between today and 5 days in the future" />
+          onChange={::this.handleChangeStart} />
+        结束时间:
+        <DatePicker
+          selected={this.state.endDate}
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+          minDate={moment().add(this.minStartDay + 1, 'days')}
+          onChange={::this.handleChangeEnd} />
 
-        03/16/2016
+        地址:
+        <input type="text" />
 
         <button onClick={::this.handleCreateOrder}>Create Order</button>
       </div>
