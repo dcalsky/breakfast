@@ -4,6 +4,7 @@ import { Order, Food, OrderDetail } from './init'
 
 export const createOrder = (total, foods, startDate, endDate, floor, room, name, phone) => {
   let order = new Order()
+  let user = AV.User.current()
   order.set('total', total)
   order.set('owner', AV.User.current())
   order.set('floor', floor)
@@ -22,5 +23,10 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
     detail.set('order', order)
     detail.save()
   })
-  order.save()
+  return order.save().then(result => {
+    if(result.id) {
+      user.set('name', name)
+      user.save()
+    }
+  })
 }

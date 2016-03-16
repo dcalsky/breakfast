@@ -17,7 +17,6 @@ class Order extends Component {
   constructor(props) {
     super(props)
     const { user, cart } = this.props
-    console.log(user)
     if(!getCurrentUser()) hashHistory.push('/login') // if not login, back to login page
     if(Object.keys(cart.foods).length === 0) hashHistory.push('/') // if none food in cart, back to index page
     this.minStartDay = moment().hour() < finalTime ? 1 : 2  // If this moment late than 22:00, order is pull off to tomorrow
@@ -45,6 +44,9 @@ class Order extends Component {
   handleCreateOrder() {
     const { cart } = this.props
     createOrder(cart.total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber)
+      .then(result => {
+        console.log(result)
+      })
   }
   handleDateChange({ startDate, endDate }) {
     startDate = startDate || this.state.startDate
