@@ -17,6 +17,7 @@ class Order extends Component {
   constructor(props) {
     super(props)
     const { user, cart } = this.props
+    console.log(user)
     if(!getCurrentUser()) hashHistory.push('/login') // if not login, back to login page
     if(Object.keys(cart.foods).length === 0) hashHistory.push('/') // if none food in cart, back to index page
     this.minStartDay = moment().hour() < finalTime ? 1 : 2  // If this moment late than 22:00, order is pull off to tomorrow
@@ -24,7 +25,7 @@ class Order extends Component {
       startDate: moment().add(this.minStartDay, 'days'),
       endDate: moment().add(this.minStartDay + 1, 'days'),
       room: user.room,
-      floor: user.floor,
+      floor: user.floor || '西南一',
       mobilePhoneNumber: user.mobilePhoneNumber,
       name: user.name,
       floors: []
@@ -46,15 +47,15 @@ class Order extends Component {
     createOrder(cart.total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber)
   }
   handleDateChange({ startDate, endDate }) {
-  startDate = startDate || this.state.startDate
-  endDate = endDate || this.state.endDate
-  if (startDate.isAfter(endDate)) {
-    let temp = startDate
-    startDate = endDate
-    endDate = temp
+    startDate = startDate || this.state.startDate
+    endDate = endDate || this.state.endDate
+    if (startDate.isAfter(endDate)) {
+      let temp = startDate
+      startDate = endDate
+      endDate = temp
+    }
+    this.setState({ startDate, endDate })
   }
-  this.setState({ startDate, endDate })
-}
 
   handleChangeStart(startDate) {
     this.handleDateChange({ startDate })
@@ -82,6 +83,7 @@ class Order extends Component {
   }
   render() {
     const { cart } = this.props
+    console.log(this.state.floor)
     return (
       <div>
         order
@@ -102,20 +104,20 @@ class Order extends Component {
           minDate={moment().add(this.minStartDay + 1, 'days')}
           onChange={::this.handleChangeEnd} />
         姓名:
-        <input type="text" placeholder="姓名" onChange={::this.handleChangeInput.bind(this, 'name')}/>
+        <input type="text" placeholder="姓名" value={this.state.name} onChange={::this.handleChangeInput.bind(this, 'name')}/>
         地址:
         <select value={this.state.floor} onChange={::this.handleChangeInput.bind(this, 'floor')}>
           {
-            this.state.floors.map(floor => {
+            this.state.floors.map((floor, i) => {
               return (
-                <option value={floor}>{floor}</option>
+                <option key={`option-${i}`} value={floor}>{floor}</option>
               )
             })
           }
         </select>
         <input type="text" placeholder="房间号" onChange={::this.handleChangeInput.bind(this, 'room')}/>
         联系方式:
-        <input type="text" placeholder="手机号" onChange={::this.handleChangeInput.bind(this, 'mobilePhoneNumber')}/>
+        <input type="text" placeholder="手机号" value={this.state.mobilePhoneNumber} onChange={::this.handleChangeInput.bind(this, 'mobilePhoneNumber')}/>
         <button onClick={::this.handleCreateOrder}>Create Order</button>
       </div>
     )

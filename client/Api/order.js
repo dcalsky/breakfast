@@ -1,10 +1,9 @@
 import AV from 'avoscloud-sdk'
-import { Order, Food } from './init'
+import { Order, Food, OrderDetail } from './init'
 // todo[1]: all mistakes should be added
 
 export const createOrder = (total, foods, startDate, endDate, floor, room, name, phone) => {
   let order = new Order()
-  let relation = order.relation('foods');
   order.set('total', total)
   order.set('owner', AV.User.current())
   order.set('floor', floor)
@@ -15,10 +14,13 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
   order.set('endDate', endDate.hours(7).minutes(0).second(0).toDate())
 
   foods.map(element => {
+    let detail = new OrderDetail()
     let food = new Food()
     food.id = element.id
-    relation.add(food)
+    detail.set('food', food)
+    detail.set('count', element.count)
+    detail.set('order', order)
+    detail.save()
   })
-
   order.save()
 }
