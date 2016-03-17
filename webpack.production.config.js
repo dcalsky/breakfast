@@ -1,6 +1,7 @@
 var rucksack = require('rucksack-css')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var poststylus = require('poststylus')
 var path = require('path')
 
 module.exports = {
@@ -17,25 +18,25 @@ module.exports = {
     loaders: [
       {
         test: /\.css$/,
-        include: /client/,
         loaders: [
           'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'css-loader',
           'postcss-loader'
         ]
-      },
-      {
-        test: /\.css$/,
-        exclude: /client/,
-        loader: 'style!css'
-      },
-      {
+      }, {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loaders: [
+          'react-hot',
           'babel-loader'
         ]
-      },
+      }, {
+        test: /\.styl$/,
+        loader: 'style-loader!css-loader!stylus-loader'
+      }, {
+        test: /\.(png|jpg)$/,
+        loader: 'url-loader'
+      }
     ],
   },
   resolve: {
@@ -46,6 +47,11 @@ module.exports = {
       autoprefixer: true
     })
   ],
+  stylus: {
+    use: [
+      poststylus([ 'autoprefixer', 'rucksack-css' ])
+    ]
+  },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.[hash].js'),
     new webpack.optimize.DedupePlugin(),
