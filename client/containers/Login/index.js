@@ -5,7 +5,7 @@ import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as UserActions from '../../actions/user'
-import style from './style.css'
+import style from './style.styl'
 
 class Login extends Component {
   constructor(props) {
@@ -59,6 +59,7 @@ class Login extends Component {
       })
       info.token = result._sessionToken
       this.props.handleUser.login(info)
+      hashHistory.push('/order')
     })
   }
   handleGetKey() {
@@ -75,29 +76,28 @@ class Login extends Component {
     const { user } = this.props
     const type = this.props.params.type
     return (
-      <div>
-        Login
-        <button onClick={::this.handleBack}>Go back</button>
-        <button onClick={::this.switchMode}>Switch mode</button>
+      <div className="login">
+        <button onClick={::this.switchMode}>切换登陆模式</button>
         {
           type === 'phone' ?
             <div className="login-phone">
-              phone
+              手机号码:
               <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} />
+              验证码:
               <input type="text" value={this.state.key} onChange={this.handleInputChange.bind(this, 'key')} />
-              <button onClick={::this.handleGetKey}>Get Key</button>
-              <button onClick={::this.handleLogin.bind(this, 'loginWithPhone')}>Login</button>
+              <button onClick={::this.handleGetKey}>获取短信验证码</button>
+              <button onClick={::this.handleLogin.bind(this, 'loginWithPhone')}>登陆</button>
             </div>
             :
             <div className="login-normal">
+              用户名:
               <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} />
+              密码:
               <input type="text" value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} />
-              <button onClick={::this.handleLogin.bind(this, 'login')}>Login</button>
-              <button onClick={::this.handleLogin.bind(this, 'register')}>Register</button>
+              <button onClick={::this.handleLogin.bind(this, 'login')}>登陆</button>
+              <button onClick={::this.handleLogin.bind(this, 'register')}>注册</button>
             </div>
         }
-        <li>username: {user.username}</li>
-
       </div>
     )
   }

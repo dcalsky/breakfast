@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import _ from 'lodash'
 import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -166,7 +167,7 @@ class Order extends Component {
         </ul>
 
         <ul className="order-amount">
-          {this.props.cart.foods.map((food, i) => {
+          {cart.foods.map((food, i) => {
             return (
               <li className="order-cart-item" key={`cart-${i}`}>
                 <span>{food.name}</span>
@@ -180,7 +181,7 @@ class Order extends Component {
           </li>
           <li className="order-amount-days">
             <span>共计</span>
-            <span style={{float: 'right'}}>{this.state.days * this.props.cart.total}元</span>
+            <span style={{float: 'right'}}>{_.round(this.state.days * cart.total, 1)}元</span>
           </li>
         </ul>
         <div className="pay">
