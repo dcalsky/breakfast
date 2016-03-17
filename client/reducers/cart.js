@@ -18,7 +18,7 @@ export default handleActions({
       return state.merge({
         count:  state.get('count') + 1,
         total: total,
-        foods: state.get('foods').push(Immutable.fromJS({id: action.payload.id, count: 1}))
+        foods: state.get('foods').push(Immutable.fromJS({id: action.payload.id, count: 1, name: action.payload.name}))
       })
     } else {
       let preFoods = state.get('foods').toJS()

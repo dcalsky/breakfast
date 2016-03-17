@@ -1,7 +1,11 @@
 import React from 'react'
+import { hashHistory } from 'react-router'
 import './style.styl'
 
 export default React.createClass({
+  handleBack() {
+    hashHistory.push('/')
+  },
   render() {
     let title = '主页'
     switch (this.props.path) {
@@ -23,7 +27,7 @@ export default React.createClass({
         {
           this.props.path !== '/' ?
             <div className="back-button">
-              Back
+              <i className="fa fa-arrow-left" onClick={this.handleBack}></i>
             </div>
             :
             null

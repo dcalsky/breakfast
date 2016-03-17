@@ -20,12 +20,12 @@ export default React.createClass({
               <div className="food-info" onClick={this.skipFoodDetail.bind(this, id)}>
                 <div className="food-info-name">{name}</div>
                 <div className="food-info-sold">售出: {sold}份</div>
-                <div className="food-info-price">￥{price}</div>
+                <div className="food-info-price"><i className="fa fa-jpy"></i> {price}</div>
               </div>
               <div className="food-info-button">
                 {
                   count > 0 ?
-                    <button onClick={this.props.removeFood.bind(this, {id, price})}><i className="fa fa-minus"></i></button>
+                    <button onClick={this.props.removeFood.bind(this, {id, price, name})}><i className="fa fa-minus"></i></button>
                     :
                     null
                 }
@@ -35,7 +35,7 @@ export default React.createClass({
                     :
                     null
                 }
-                <button onClick={this.props.addFood.bind(this, {id, price})}><i className="fa fa-plus"></i></button>
+                <button onClick={this.props.addFood.bind(this, {id, price, name})}><i className="fa fa-plus"></i></button>
 
               </div>
             </li>)
