@@ -2,9 +2,43 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Boilerplate</title>
+    <title>同济早餐</title>
+    <meta name="author" content="Dcalsky">
+    <meta name="description" content="breakfast">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      html, body {
+        height: 100%;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: 0;
+      }
+      #loading .title {
+        margin: 0;
+        color: #fff;
+        padding-top: 120px;
+      }
+      #loading {
+        height: 100%;
+        background: tomato;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="loading">
+      <h1 class="title">同济早餐</h1>
+      <div class="animation">
+        <img src="../static/loading-bars.svg" width="64" height="64" />
+      </div>
+    </div>
+    <div id="root" style="display: none"></div>
+    <script>
+      var loading = document.getElementById('loading')
+      var root = document.getElementById('root')
+      var finish = function() {
+        document.body.removeChild(loading)
+        root.removeAttribute('style')
+      }
+    </script>
   </body>
 </html>

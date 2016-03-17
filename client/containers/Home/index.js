@@ -18,6 +18,7 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.init()
+    finish()
   }
   init() {
     const currentUser = getCurrentUser()
@@ -41,6 +42,7 @@ class Home extends Component {
   }
   handleSelectType(type) {
     this.props.handleType.selectType(type)
+
   }
   skipToOrder() {
     const cart = this.props.cart
