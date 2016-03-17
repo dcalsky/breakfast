@@ -12,19 +12,19 @@ import { getCurrentUser } from '../../Api/user'
 import TypeList from '../../components/TypeList'
 import FoodList from '../../components/FoodList'
 import Cart from '../../components/Cart'
-import './home.css'
+import './home.styl'
 
 class Home extends Component {
   constructor(props) {
     super(props)
     this.init()
-    finish()
   }
   init() {
     const currentUser = getCurrentUser()
     if(!this.props.foods.loaded) {
       getFoods().then(result => {
         this.props.handleFood.syncFoods(result)
+        finish()
       })
     }
     if(!this.props.types.loaded) {
@@ -60,18 +60,13 @@ class Home extends Component {
     const {types, foods, cart} = this.props
     return (
       <div className="home">
-        Home
-        <button onClick={::this.skipToOrder}>Go Order</button>
-        <button onClick={::this.skipToLogin}>Go Login</button>
         <div className="home-type">
           <TypeList types={types.content} active={types.active} handleSelectType={::this.handleSelectType} />
         </div>
         <div className="home-food">
           <FoodList foods={foods.content} addFood={this.props.handleCart.addFood}  removeFood={this.props.handleCart.removeFood} cart={cart} />
         </div>
-        <div className="home-cart">
-          <Cart cart={cart}/>
-        </div>
+        <Cart cart={cart} handleSkip={::this.skipToOrder} buttonTitle="下单"/>
       </div>
     )
   }

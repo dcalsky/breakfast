@@ -1,6 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
-import './style.css'
+import './style.styl'
 
 export default React.createClass({
   render() {
@@ -10,7 +10,7 @@ export default React.createClass({
           return (
           <li
             key={i}
-            className={cx({'type-active': type.id === this.props.active})}
+            className={cx({'type-active': type.id === this.props.active, "type-list-item": true})}
             onClick={()=>{this.props.handleSelectType(type.id)}}>
             {type.attributes.name}
           </li>)

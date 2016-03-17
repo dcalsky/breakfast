@@ -1,6 +1,7 @@
 var rucksack = require('rucksack-css')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var webpack = require('webpack')
+var poststylus = require('poststylus')
 var path = require('path')
 
 
@@ -29,15 +30,17 @@ module.exports = {
           'css-loader',
           'postcss-loader'
         ]
-      },
-      {
+      }, {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loaders: [
           'react-hot',
           'babel-loader'
         ]
-      },
+      }, {
+        test: /\.styl$/,
+        loader: 'style-loader!css-loader!stylus-loader'
+      }
     ],
   },
   resolve: {
@@ -48,6 +51,11 @@ module.exports = {
       autoprefixer: true
     })
   ],
+  stylus: {
+    use: [
+      poststylus([ 'autoprefixer', 'rucksack-css' ])
+    ]
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),

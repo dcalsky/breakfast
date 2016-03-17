@@ -1,4 +1,5 @@
 import React from 'react'
+import './style.styl'
 
 export default React.createClass({
   render() {
@@ -18,8 +19,16 @@ export default React.createClass({
         break
     }
     return (
-      <header>
-        {title}
+      <header className="header">
+        {
+          this.props.path !== '/' ?
+            <div className="back-button">
+              Back
+            </div>
+            :
+            null
+        }
+        <h3>{title}</h3>
       </header>
     )
   }
