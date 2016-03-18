@@ -18,6 +18,12 @@ export default React.createClass({
       case '/payment':
         title = '付款'
         break
+      case '/foods':
+        title = '食物介绍'
+        break
+      case '/login':
+        title = '登陆'
+        break
       default :
         title = '设置'
         break

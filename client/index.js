@@ -36,6 +36,8 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
+finish()
+
 
 /*
 * 2 + 1.5 + 1.5 = 5 // single one

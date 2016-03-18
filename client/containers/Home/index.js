@@ -12,7 +12,7 @@ import { getCurrentUser } from '../../Api/user'
 import TypeList from '../../components/TypeList'
 import FoodList from '../../components/FoodList'
 import Cart from '../../components/Cart'
-import './home.styl'
+import './style.styl'
 
 class Home extends Component {
   constructor(props) {
@@ -24,7 +24,6 @@ class Home extends Component {
     if(!this.props.foods.loaded) {
       getFoods().then(result => {
         this.props.handleFood.syncFoods(result)
-        finish()
       })
     }
     if(!this.props.types.loaded) {
