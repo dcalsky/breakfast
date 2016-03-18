@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Immutable from 'immutable'
 import { login, register, loginWithPhone, getKey } from '../../Api/user'
+import { getCurrentUser } from '../../Api/user'
 import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -15,9 +16,9 @@ class Login extends Component {
       password: '',
       key: null
     }
-  }
-  handleBack() {
-    hashHistory.goBack()
+    if(getCurrentUser()) {
+      hashHistory.push('/')
+    }
   }
   handleInputChange(type, e) {
     switch (type) {
@@ -50,7 +51,7 @@ class Login extends Component {
         event = loginWithPhone(this.state.username, this.state.key)
         break
       default:
-        event = login('1453937', '260013')
+        event = login(this.state.username, this.state.password)
         break
     }
     event.then(result => {
@@ -99,7 +100,7 @@ class Login extends Component {
                 <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} placeholder="用户名"/>
               </div>
               <div className="form-table">
-                <input type="text" value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} placeholder="密码"/>
+                <input type="password" value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} placeholder="密码"/>
               </div>
               <p className="switch-login-mode" onClick={::this.switchMode}>短信验证码登陆</p>
               <button className="login-button" onClick={::this.handleLogin.bind(this, 'login')}>登陆</button>

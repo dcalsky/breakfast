@@ -24,6 +24,9 @@ export default React.createClass({
       case '/login':
         title = '登陆'
         break
+      case '/login/phone':
+        title = '手机验证登陆'
+        break
       default :
         title = '设置'
         break
