@@ -5,6 +5,7 @@ import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { createOrder } from '../../Api/order'
+import { isPhoneNumber, isLegalName, isLegalPassword } from '../../actions/common'
 import { getFloors } from '../../Api/floor'
 import { getCurrentUser } from '../../Api/user'
 import CartList from '../../components/CartList'
@@ -41,15 +42,21 @@ class Order extends Component {
       })
     })
   }
-  handleBack() {
-    hashHistory.push('/')
-  }
   handleCreateOrder() {
     const { cart } = this.props
-    createOrder(cart.total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber)
-      .then(result => {
-        console.log(result)
-      })
+    if(!isPhoneNumber(this.state.mobilePhoneNumber)) {
+      alert('手机号码格式有误')
+    } else if(!isLegalName(this.state.name)) {
+      alert('姓名格式有误')
+    } else if(!this.state.room || this.state.room.length === 0) {
+      alert('请填写房间号')
+    } else {
+      createOrder(cart.total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber)
+        .then(result => {
+          console.log(result)
+        })
+    }
+
   }
   handleDateChange({ startDate, endDate }) {
     startDate = startDate || this.state.startDate
@@ -192,6 +199,7 @@ class Order extends Component {
   }
 }
 
+
 function mapStateToProps(state) {
   return {
     cart: state.get('cart').toJS(),
@@ -199,13 +207,6 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-
-  }
-}
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(Order)

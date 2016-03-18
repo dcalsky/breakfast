@@ -4,6 +4,7 @@ import './style.styl'
 
 export default React.createClass({
   render() {
+    console.log(this.props.disabled)
     return (
       <div className="cart">
         <div className="cart-count">
@@ -14,7 +15,7 @@ export default React.createClass({
           共计: {this.props.cart.total} 元
         </div>
         <div className="cart-buy">
-          <button onClick={this.props.handleSkip}>{this.props.buttonTitle}</button>
+          <button onClick={this.props.handleSkip} disabled={this.props.disabled}>{this.props.buttonTitle}</button>
         </div>
       </div>
     )

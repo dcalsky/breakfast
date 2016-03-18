@@ -1,4 +1,5 @@
 import React from 'react'
+import { getCurrentUser } from '../../Api/user'
 import { hashHistory } from 'react-router'
 import './style.styl'
 
@@ -42,6 +43,14 @@ export default React.createClass({
             null
         }
         <h3>{title}</h3>
+        {
+          !getCurrentUser() ?
+            <div className="login-icon">
+              快速登陆
+            </div>
+            :
+            null
+        }
       </header>
     )
   }

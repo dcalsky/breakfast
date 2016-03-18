@@ -5,6 +5,7 @@ import { getCurrentUser } from '../../Api/user'
 import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { isLegalPassword, isPhoneNumber } from '../../actions/common'
 import * as UserActions from '../../actions/user'
 import style from './style.styl'
 
@@ -14,6 +15,7 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
+      ableToGetKey: false,
       key: null
     }
     if(getCurrentUser()) {
@@ -21,22 +23,29 @@ class Login extends Component {
     }
   }
   handleInputChange(type, e) {
+    const value = e.target.value
     switch (type) {
       case 'username':
         this.setState({
-          username: e.target.value,
+          username: value,
           password: this.state.password
+        })
+        break
+      case 'phone':
+        this.setState({
+          username: value,
+          ableToGetKey: isPhoneNumber(value)
         })
         break
       case 'password':
         this.setState({
           username: this.state.username,
-          password: e.target.value
+          password: value
         })
         break
       case 'key':
         this.setState({
-          key: e.target.value
+          key: value
         })
         break
     }
@@ -64,7 +73,9 @@ class Login extends Component {
     })
   }
   handleGetKey() {
-    //getKey(this.state.username)
+    if(this.state.ableToGetKey) {
+      //getKey(this.state.username)
+    }
   }
   switchMode() {
     if(this.props.params.type === 'phone') {
@@ -85,8 +96,8 @@ class Login extends Component {
           type === 'phone' ?
               <form className="login-form" onSubmit={::this.handleFormSubmit}>
                 <div className="form-table">
-                  <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} placeholder="手机号码"/>
-                  <button className="get-key" onClick={::this.handleGetKey}>获取验证码</button>
+                  <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'phone')} placeholder="手机号码"/>
+                  <button className="get-key" disabled={!this.state.ableToGetKey} onClick={::this.handleGetKey}>获取验证码</button>
                 </div>
                 <div className="form-table">
                   <input type="text" value={this.state.key} onChange={this.handleInputChange.bind(this, 'key')} placeholder="收到的验证码"/>
