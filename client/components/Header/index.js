@@ -1,10 +1,25 @@
 import React from 'react'
-import { getCurrentUser } from '../../Api/user'
+import { getCurrentUser, logout } from '../../Api/user'
 import { hashHistory } from 'react-router'
 import './style.styl'
 
 export default React.createClass({
+  getInitialState() {
+    return {
+      hadLogin: getCurrentUser() ? true : false
+    }
+  },
   handleBack() {
+    hashHistory.push('/')
+  },
+  skipToLogin() {
+    hashHistory.push('/login')
+  },
+  handleLogout() {
+    this.props.logout()
+    this.setState({
+      hadLogin: false
+    })
     hashHistory.push('/')
   },
   render() {
@@ -44,12 +59,16 @@ export default React.createClass({
         }
         <h3>{title}</h3>
         {
-          !getCurrentUser() ?
-            <div className="login-icon">
-              快速登陆
+          this.state.hadLogin || getCurrentUser() ?
+            <div className="user-icon" onClick={this.handleLogout}>
+              <i className="fa fa-sign-out"></i>
+              注销
             </div>
             :
-            null
+            <div className="user-icon" onClick={this.skipToLogin}>
+              <i className="fa fa-sign-in"></i>
+              登陆
+            </div>
         }
       </header>
     )

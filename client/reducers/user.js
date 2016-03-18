@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions'
+import AV from 'avoscloud-sdk'
 import Immutable from 'immutable'
 
 const initialState = Immutable.fromJS({
@@ -18,6 +19,7 @@ export default handleActions({
     return state.merge(action.payload, {hadLogin: true})
   },
   'logout' (state, action) {
+    AV.User.logOut()
     return initialState
   },
   'update info' (state, action) {
