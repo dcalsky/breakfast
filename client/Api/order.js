@@ -27,7 +27,6 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
   order.save().then(result => {
     if(result.id) {
       user.set('name', name)
-      user.set('room', room)
       user.save().then(uResult => {
         callback(result)
       })

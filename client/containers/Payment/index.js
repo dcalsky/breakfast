@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import * as OrderActions from '../../actions/order'
 import './style.styl'
 
-const payURL = "http://localhost:3000/pay"
+const payURL = "http://tjbf.leanapp.cn/pay"
+//todo
 const partner_id = "2088221435928705"
 
 class Payment extends Component {
