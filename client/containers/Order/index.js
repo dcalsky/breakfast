@@ -8,6 +8,7 @@ import { createOrder } from '../../Api/order'
 import { isPhoneNumber, isLegalName, isLegalPassword } from '../../actions/common'
 import { getFloors } from '../../Api/floor'
 import { getCurrentUser } from '../../Api/user'
+import * as OrderActions from '../../actions/order'
 import CartList from '../../components/CartList'
 import DatePicker from 'react-datepicker'
 import style from './style.styl'
@@ -31,7 +32,9 @@ class Order extends Component {
       floor: user.floor || '西南一',
       mobilePhoneNumber: user.mobilePhoneNumber,
       name: user.name,
-      floors: []
+      floors: [],
+      buttonDisabled: false,
+      couponId: null
     }
     getFloors().then(result => {
       const floors = result.map(floor => {
@@ -42,7 +45,8 @@ class Order extends Component {
       })
     })
   }
-  handleCreateOrder() {
+  handleCreateOrder(e) {
+    e.preventDefault()
     const { cart } = this.props
     if(!isPhoneNumber(this.state.mobilePhoneNumber)) {
       alert('手机号码格式有误')
@@ -51,10 +55,14 @@ class Order extends Component {
     } else if(!this.state.room || this.state.room.length === 0) {
       alert('请填写房间号')
     } else {
-      createOrder(cart.total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber)
-        .then(result => {
-          console.log(result)
-        })
+      this.setState({
+        buttonDisabled: true
+      })
+      const total = _.round(this.state.days * cart.total, 1)
+      createOrder(total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, result => {
+        this.props.handleOrder.createOrder({id: result.id, total: total})
+        hashHistory.push('/payment')
+      })
     }
 
   }
@@ -94,13 +102,17 @@ class Order extends Component {
         break
     }
   }
+  handleSelectCoupon(val) {
+
+  }
   skipPayment() {
     hashHistory.push('/payment')
   }
   render() {
+    console.log(this.props)
     const { cart } = this.props
     return (
-      <div className="order">
+      <form className="order"  onSubmit={::this.handleCreateOrder}>
         <ul className="order-address">
           <li className="order-address-item">
             <span>寝室楼</span>
@@ -163,8 +175,9 @@ class Order extends Component {
         <ul className="order-pay">
           <li className="order-coupon-item">
             <span>优惠券</span>
-            <select value="优惠券选择" >
+            <select value="优惠券选择" onchange={::this.handleSelectCoupon}>
               <option value="优惠券1">优惠1</option>
+              <option value="优惠券2">优惠1</option>
             </select>
           </li>
           <li className="order-pay-item">
@@ -192,9 +205,9 @@ class Order extends Component {
           </li>
         </ul>
         <div className="pay">
-          <button onClick={::this.handleCreateOrder}>确认下单</button>
+          <button type="submit" disabled={this.state.buttonDisabled}>确认下单</button>
         </div>
-      </div>
+      </form>
     )
   }
 }
@@ -203,10 +216,18 @@ class Order extends Component {
 function mapStateToProps(state) {
   return {
     cart: state.get('cart').toJS(),
-    user: state.get('user').toJS()
+    user: state.get('user').toJS(),
+    order: state.get('order')
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    handleOrder: bindActionCreators(OrderActions, dispatch),
   }
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Order)

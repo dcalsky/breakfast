@@ -1,12 +1,13 @@
 import AV from 'avoscloud-sdk'
+import request from 'superagent'
 import { Order, Food, OrderDetail } from './init'
 // todo[1]: all mistakes should be added
 
-export const createOrder = (total, foods, startDate, endDate, floor, room, name, phone) => {
+export const createOrder = (total, foods, startDate, endDate, floor, room, name, phone, callback) => {
   let order = new Order()
   let user = AV.User.current()
   order.set('total', total)
-  order.set('owner', AV.User.current())
+  order.set('owner', user)
   order.set('floor', floor)
   order.set('room', room)
   order.set('name', name)
@@ -23,10 +24,23 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
     detail.set('order', order)
     detail.save()
   })
-  return order.save().then(result => {
+  order.save().then(result => {
     if(result.id) {
       user.set('name', name)
-      user.save()
+      user.set('room', room)
+      user.save().then(uResult => {
+        callback(result)
+      })
     }
   })
 }
+
+
+//request
+//  .post('http://localhost:3000/pay')
+//  .type('form')
+//  .send({out_trade_no: result.id, subject: '食物订单', seller_id: '2088221435928705', total_fee: total, body: '普通食物订单', show_url: '1'})
+//  .end((err, resp) => {
+//    var aliWindow = window.open("", "_self");
+//    aliWindow.document.write(resp.text);
+//  })

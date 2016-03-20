@@ -5,6 +5,6 @@ const initialState = {}
 
 export default handleActions({
   'create order' (state, action) {
-    return state
+    return action.payload
   }
 }, initialState)

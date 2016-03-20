@@ -6,6 +6,7 @@ import foods from './foods'
 import common from './common'
 import types from './types'
 import user from './user'
+import order from './order'
 
 export default combineReducers({
   routing,
@@ -13,5 +14,6 @@ export default combineReducers({
   common,
   foods,
   types,
-  user
+  user,
+  order
 })

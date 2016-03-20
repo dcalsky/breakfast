@@ -59,16 +59,20 @@ export default React.createClass({
         }
         <h3>{title}</h3>
         {
-          this.state.hadLogin || getCurrentUser() ?
+          (this.state.hadLogin || getCurrentUser()) ?
             <div className="user-icon" onClick={this.handleLogout}>
               <i className="fa fa-sign-out"></i>
               注销
             </div>
             :
-            <div className="user-icon" onClick={this.skipToLogin}>
-              <i className="fa fa-sign-in"></i>
-              登陆
-            </div>
+            this.props.path !== '/login' && this.props.path !== '/login/phone' ?
+              <div className="user-icon" onClick={this.skipToLogin}>
+                <i className="fa fa-sign-in"></i>
+                登陆
+              </div>
+              :
+              null
+
         }
       </header>
     )

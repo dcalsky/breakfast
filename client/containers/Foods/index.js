@@ -41,7 +41,7 @@ class Foods extends Component {
             <div className="food-info-button" style={{bottom: -10}}>
               {
                 count > 0 ?
-                  <button onClick={this.props.handleCart.removeFood.bind(this, {id, price})}><i className="fa fa-minus"></i></button>
+                  <button onClick={this.props.handleCart.removeFood.bind(this, {id, price, name})}><i className="fa fa-minus"></i></button>
                   :
                   null
               }
@@ -51,7 +51,7 @@ class Foods extends Component {
                   :
                   null
               }
-              <button onClick={this.props.handleCart.addFood.bind(this, {id, price})}><i className="fa fa-plus"></i></button>
+              <button onClick={this.props.handleCart.addFood.bind(this, {id, price, name})}><i className="fa fa-plus"></i></button>
 
             </div>
           </div>

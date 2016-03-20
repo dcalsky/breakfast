@@ -56,6 +56,8 @@
     "redux-immutable": "^3.0.6",
     "redux-immutablejs": "0.0.8",
     "redux-thunk": "^2.0.1",
-    "seamless-immutable": "^5.1.0"
+    "reqwest": "^2.0.5",
+    "seamless-immutable": "^5.1.0",
+    "superagent": "^1.8.1"
   }
 }

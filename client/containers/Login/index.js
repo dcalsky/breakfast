@@ -16,6 +16,7 @@ class Login extends Component {
       username: '',
       password: '',
       ableToGetKey: false,
+      waitingTime: 0,
       key: null
     }
     if(getCurrentUser()) {
@@ -73,8 +74,12 @@ class Login extends Component {
     })
   }
   handleGetKey() {
-    if(this.state.ableToGetKey) {
-      //getKey(this.state.username)
+    if(this.state.ableToGetKey && this.state.waitingTime === 0) {
+      getKey(this.state.username)
+      this.setState({
+        ableToGetKey: false,
+        waitingTime: 60
+      })
     }
   }
   switchMode() {
@@ -92,32 +97,17 @@ class Login extends Component {
     const type = this.props.params.type
     return (
       <div className="login">
-        {
-          type === 'phone' ?
               <form className="login-form" onSubmit={::this.handleFormSubmit}>
                 <div className="form-table">
                   <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'phone')} placeholder="手机号码"/>
-                  <button className="get-key" disabled={!this.state.ableToGetKey} onClick={::this.handleGetKey}>获取验证码</button>
+                  <button className="get-key" disabled={!this.state.ableToGetKey || !(this.state.waitingTime === 0)} onClick={::this.handleGetKey}>获取验证码</button>
                 </div>
                 <div className="form-table">
                   <input type="text" value={this.state.key} onChange={this.handleInputChange.bind(this, 'key')} placeholder="收到的验证码"/>
                 </div>
-                <p className="switch-login-mode" onClick={::this.switchMode}>账号密码登陆</p>
                 <button className="login-phone-button" onClick={::this.handleLogin.bind(this, 'loginWithPhone')}>验证并登陆</button>
               </form>
-            :
-            <form className="login-form" onSubmit={::this.handleFormSubmit}>
-              <div className="form-table">
-                <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} placeholder="用户名"/>
-              </div>
-              <div className="form-table">
-                <input type="password" value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} placeholder="密码"/>
-              </div>
-              <p className="switch-login-mode" onClick={::this.switchMode}>短信验证码登陆</p>
-              <button className="login-button" onClick={::this.handleLogin.bind(this, 'login')}>登陆</button>
-              <button className="register-button" onClick={::this.handleLogin.bind(this, 'register')}>注册</button>
-            </form>
-        }
+
       </div>
     )
   }
@@ -139,3 +129,18 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Login)
+
+
+/*            :
+ <form className="login-form" onSubmit={::this.handleFormSubmit}>
+ <div className="form-table">
+ <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'username')} placeholder="用户名"/>
+ </div>
+ <div className="form-table">
+ <input type="password" value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} placeholder="密码"/>
+ </div>
+ <p className="switch-login-mode" onClick={::this.switchMode}>短信验证码登陆</p>
+ <button className="login-button" onClick={::this.handleLogin.bind(this, 'login')}>登陆</button>
+ <button className="register-button" onClick={::this.handleLogin.bind(this, 'register')}>注册</button>
+ </form>
+ }*/

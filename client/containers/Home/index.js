@@ -46,13 +46,13 @@ class Home extends Component {
   skipToOrder() {
     const cart = this.props.cart
     if(cart.total > 0 && cart.count > 0) {
-      hashHistory.push('/order')
+      hashHistory.push({ pathname: '/order'})
     }
   }
   skipToLogin() {
     const user = this.props.user
     if(Object.keys(user).length !== 0 && !user.hadLogin) {
-      hashHistory.push('/login')
+      hashHistory.push({pathname: '/login'})
     }
   }
   render() {
