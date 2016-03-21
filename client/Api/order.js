@@ -1,5 +1,4 @@
 import AV from 'avoscloud-sdk'
-import request from 'superagent'
 import { Order, Food, OrderDetail } from './init'
 // todo[1]: all mistakes should be added
 

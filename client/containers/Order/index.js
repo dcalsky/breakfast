@@ -8,6 +8,7 @@ import { createOrder } from '../../Api/order'
 import { isPhoneNumber, isLegalName, isLegalPassword } from '../../actions/common'
 import { getFloors } from '../../Api/floor'
 import { getCurrentUser } from '../../Api/user'
+import * as CouponActions from '../../actions/coupon'
 import * as OrderActions from '../../actions/order'
 import CartList from '../../components/CartList'
 import DatePicker from 'react-datepicker'
@@ -217,13 +218,15 @@ function mapStateToProps(state) {
   return {
     cart: state.get('cart').toJS(),
     user: state.get('user').toJS(),
-    order: state.get('order')
+    order: state.get('order'),
+    coupon: state.coupon
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     handleOrder: bindActionCreators(OrderActions, dispatch),
+    handleCoupon: bindActionCreators(CouponActions, dispatch)
   }
 }
 

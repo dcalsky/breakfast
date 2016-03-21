@@ -1,8 +1,8 @@
 {
-  "name": "frontend-boilerplate",
+  "name": "breakfast",
   "version": "1.0.0",
   "private": true,
-  "description": "A boilerplate of things that shouldn't exist",
+  "description": "breafast",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -43,21 +43,14 @@
     "webpack-hot-middleware": "^2.7.1"
   },
   "dependencies": {
-    "async": "^1.5.2",
-    "asyncawait": "^1.0.3",
     "avoscloud-sdk": "^0.6.9",
     "classnames": "^2.2.3",
     "immutable": "^3.7.6",
-    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.6.1",
     "moment": "^2.12.0",
     "react-datepicker": "^0.24.0",
-    "react-select": "^0.9.1",
     "redux-immutable": "^3.0.6",
     "redux-immutablejs": "0.0.8",
-    "redux-thunk": "^2.0.1",
-    "reqwest": "^2.0.5",
-    "seamless-immutable": "^5.1.0",
-    "superagent": "^1.8.1"
+    "redux-thunk": "^2.0.1"
   }
 }

@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { isLegalPassword, isPhoneNumber } from '../../actions/common'
 import * as UserActions from '../../actions/user'
+import * as CouponActions from '../../actions/coupon'
 import style from './style.styl'
 
 class Login extends Component {
@@ -58,7 +59,7 @@ class Login extends Component {
         event = register(this.state.username, this.state.password)
         break
       case 'loginWithPhone':
-        event = loginWithPhone(this.state.username, this.state.key)
+        event = loginWithPhone(this.state.username, this.state.key, this.props.location.query.coupon)
         break
       default:
         event = login(this.state.username, this.state.password)
@@ -70,6 +71,7 @@ class Login extends Component {
       })
       info.token = result._sessionToken
       this.props.handleUser.login(info)
+      this.props.handleCoupon.getCoupon(this.props.location.query.coupon)
       hashHistory.push('/order')
     })
   }
@@ -89,25 +91,21 @@ class Login extends Component {
       hashHistory.push('/login/phone')
     }
   }
-  handleFormSubmit(e) {
-    e.preventDefault()
-  }
   render() {
     const { user } = this.props
     const type = this.props.params.type
     return (
       <div className="login">
-              <form className="login-form" onSubmit={::this.handleFormSubmit}>
-                <div className="form-table">
-                  <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'phone')} placeholder="手机号码"/>
-                  <button className="get-key" disabled={!this.state.ableToGetKey || !(this.state.waitingTime === 0)} onClick={::this.handleGetKey}>获取验证码</button>
-                </div>
-                <div className="form-table">
-                  <input type="text" value={this.state.key} onChange={this.handleInputChange.bind(this, 'key')} placeholder="收到的验证码"/>
-                </div>
-                <button className="login-phone-button" onClick={::this.handleLogin.bind(this, 'loginWithPhone')}>验证并登陆</button>
-              </form>
-
+        <div className="login-form">
+          <div className="form-table">
+            <input type="text" value={this.state.username} onChange={this.handleInputChange.bind(this, 'phone')} placeholder="手机号码"/>
+            <button className="get-key" disabled={!this.state.ableToGetKey || !(this.state.waitingTime === 0)} onClick={::this.handleGetKey}>获取验证码</button>
+          </div>
+          <div className="form-table">
+            <input type="text" value={this.state.key} onChange={this.handleInputChange.bind(this, 'key')} placeholder="收到的验证码"/>
+          </div>
+          <button className="login-phone-button" onClick={::this.handleLogin.bind(this, 'loginWithPhone')}>验证并登陆</button>
+        </div>
       </div>
     )
   }
@@ -115,13 +113,15 @@ class Login extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.get('user').toJS()
+    user: state.get('user').toJS(),
+    coupon: state.coupon
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     handleUser: bindActionCreators(UserActions, dispatch),
+    handleCoupon: bindActionCreators(CouponActions, dispatch),
   }
 }
 
