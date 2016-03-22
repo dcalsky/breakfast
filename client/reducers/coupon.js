@@ -1,3 +1,4 @@
+
 import { handleActions } from 'redux-actions'
 
 const initialState = {
@@ -7,10 +8,14 @@ const initialState = {
 
 
 export default handleActions({
-  'get coupon' (state, action) {
+  'had coupon' (state, action) {
     return {
-      couponId: action.payload,
-      coupons: state.coupons
+      couponId: action.payload
+    }
+  },
+  'fetch coupon' (state, action) {
+    return {
+      coupons: action.payload
     }
   }
 }, initialState)

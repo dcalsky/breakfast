@@ -1,3 +1,5 @@
 import { createAction } from 'redux-actions'
 
-export const getCoupon = createAction('get coupon')
+export const hadCoupon = createAction('had coupon')
+export const fetchCoupon = createAction('fetch coupon')
+

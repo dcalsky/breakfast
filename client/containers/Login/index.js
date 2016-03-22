@@ -13,12 +13,16 @@ import style from './style.styl'
 class Login extends Component {
   constructor(props) {
     super(props)
+    const coupon = this.props.location.query.coupon
     this.state = {
       username: '',
       password: '',
       ableToGetKey: false,
       waitingTime: 0,
       key: null
+    }
+    if(coupon) {
+      this.props.handleCoupon.hadCoupon(coupon)
     }
     if(getCurrentUser()) {
       hashHistory.push('/')
@@ -71,7 +75,7 @@ class Login extends Component {
       })
       info.token = result._sessionToken
       this.props.handleUser.login(info)
-      this.props.handleCoupon.getCoupon(this.props.location.query.coupon)
+
       hashHistory.push('/order')
     })
   }

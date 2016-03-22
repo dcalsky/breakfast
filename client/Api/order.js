@@ -1,8 +1,8 @@
 import AV from 'avoscloud-sdk'
-import { Order, Food, OrderDetail } from './init'
+import { Order, Food, OrderDetail, Coupon, CouponDetail } from './init'
 // todo[1]: all mistakes should be added
 
-export const createOrder = (total, foods, startDate, endDate, floor, room, name, phone, callback) => {
+export const createOrder = (total, foods, startDate, endDate, floor, room, name, phone, couponId, discount, callback) => {
   let order = new Order()
   let user = AV.User.current()
   order.set('total', total)
@@ -13,6 +13,19 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
   order.set('phone', phone)
   order.set('startDate', startDate.hours(7).minute(0).second(0).toDate())
   order.set('endDate', endDate.hours(7).minutes(0).second(0).toDate())
+  if(couponId) {
+    let coupon = new Coupon()
+    let couponDetail = new CouponDetail()
+    let relation = user.relation('coupon')
+    coupon.id = couponId
+    relation.remove(coupon)
+    couponDetail.set('coupon', coupon)
+    couponDetail.set('user', user)
+    couponDetail.save().then(result => {
+      let finalTotal = total - discount < 0 ? 0 : total - discount
+      order.set('total', finalTotal)
+    })
+  }
 
   foods.map(element => {
     let detail = new OrderDetail()
@@ -26,8 +39,8 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
   order.save().then(result => {
     if(result.id) {
       user.set('name', name)
-      user.save().then(uResult => {
-        callback(result)
+      user.save().then(() => {
+        callback({id: result.id, total: result.get('total')})
       })
     }
   })

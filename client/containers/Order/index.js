@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { hashHistory } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { hadCoupon, addCoupon, fetchCoupon } from '../../Api/coupon'
 import { createOrder } from '../../Api/order'
 import { isPhoneNumber, isLegalName, isLegalPassword } from '../../actions/common'
 import { getFloors } from '../../Api/floor'
@@ -22,7 +23,8 @@ class Order extends Component {
   constructor(props) {
     super(props)
     const { user, cart } = this.props
-    if(!getCurrentUser()) hashHistory.push('/login') // if not login, back to login page
+    const currentUser = getCurrentUser()
+    if(!currentUser) hashHistory.push('/login') // if not login, back to login page
     if(Object.keys(cart.foods).length === 0) hashHistory.push('/') // if none food in cart, back to index page
     this.minStartDay = moment().hour() < finalTime ? 1 : 2  // If this moment late than 22:00, order is pull off to tomorrow
     this.state = {
@@ -45,6 +47,19 @@ class Order extends Component {
         floors: floors
       })
     })
+    hadCoupon(this.props.coupon.couponId, currentUser, result => {
+      if(!result) { // result is true or false
+        addCoupon(this.props.coupon.couponId, currentUser).then(() => {
+          fetchCoupon(currentUser, coupons => {
+            this.props.handleCoupon.fetchCoupon(coupons)
+          })
+        })
+      } else {
+        fetchCoupon(currentUser, coupons => {
+          this.props.handleCoupon.fetchCoupon(coupons)
+        })
+      }
+    })
   }
   handleCreateOrder(e) {
     e.preventDefault()
@@ -60,9 +75,13 @@ class Order extends Component {
         buttonDisabled: true
       })
       const total = _.round(this.state.days * cart.total, 1)
-      createOrder(total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, result => {
-        this.props.handleOrder.createOrder({id: result.id, total: total})
-        hashHistory.push('/payment')
+      const coupon = _.find(this.props.coupon.coupons, {id: this.state.couponId})
+      const discount = coupon ? coupon.get('discount') : 0
+      createOrder(total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, this.state.couponId, discount, result => {
+        this.props.handleOrder.createOrder({id: result.id, total: result.total})
+        if(result.total === 0 ) {
+          hashHistory.push({pathname: '/result', query: {result: true}})
+        }
       })
     }
 
@@ -103,15 +122,16 @@ class Order extends Component {
         break
     }
   }
-  handleSelectCoupon(val) {
-
+  handleSelectCoupon(e) {
+    this.setState({
+      couponId: e.target.value
+    })
   }
   skipPayment() {
     hashHistory.push('/payment')
   }
   render() {
-    console.log(this.props)
-    const { cart } = this.props
+    const { cart, coupon } = this.props
     return (
       <form className="order"  onSubmit={::this.handleCreateOrder}>
         <ul className="order-address">
@@ -176,9 +196,15 @@ class Order extends Component {
         <ul className="order-pay">
           <li className="order-coupon-item">
             <span>优惠券</span>
-            <select value="优惠券选择" onchange={::this.handleSelectCoupon}>
-              <option value="优惠券1">优惠1</option>
-              <option value="优惠券2">优惠1</option>
+            <select value={this.state.couponId} onChange={::this.handleSelectCoupon}>
+              <option value={null}>选择优惠券</option>
+              {
+                coupon.coupons.map(coupon => {
+                  return (
+                    <option value={coupon.id}>{`${coupon.get('name')}/${coupon.get('discount')}元`}</option>
+                  )
+                })
+              }
             </select>
           </li>
           <li className="order-pay-item">
@@ -219,7 +245,7 @@ function mapStateToProps(state) {
     cart: state.get('cart').toJS(),
     user: state.get('user').toJS(),
     order: state.get('order'),
-    coupon: state.coupon
+    coupon: state.get('coupon')
   }
 }
 
