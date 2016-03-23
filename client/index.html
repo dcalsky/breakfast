@@ -6,7 +6,7 @@
     <title>同济早餐</title>
     <meta name="author" content="Dcalsky">
     <meta name="description" content="breakfast">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <style>
@@ -35,7 +35,7 @@
     <div id="loading">
       <h1 class="title">同济早餐</h1>
       <div class="animation">
-        <img src="../static/loading-bars.svg" width="64" height="64" />
+        <img src="loading-bars.svg" width="64" height="64" />
       </div>
     </div>
     <div id="root" style="display: none"></div>
@@ -45,6 +45,14 @@
       var finish = function() {
         document.body.removeChild(loading)
         root.removeAttribute('style')
+      }
+    </script>
+    <script type='application/javascript' src="http://cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script>
+    <script>
+      if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function() {
+          FastClick.attach(document.body);
+        }, false);
       }
     </script>
   </body>

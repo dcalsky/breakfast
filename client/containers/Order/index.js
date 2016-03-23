@@ -24,8 +24,6 @@ class Order extends Component {
     super(props)
     const { user, cart } = this.props
     const currentUser = getCurrentUser()
-    if(!currentUser) hashHistory.push('/login') // if not login, back to login page
-    if(Object.keys(cart.foods).length === 0) hashHistory.push('/') // if none food in cart, back to index page
     this.minStartDay = moment().hour() < finalTime ? 1 : 2  // If this moment late than 22:00, order is pull off to tomorrow
     this.state = {
       startDate: moment().add(this.minStartDay, 'days'),
@@ -39,6 +37,14 @@ class Order extends Component {
       buttonDisabled: false,
       couponId: null
     }
+    if(!currentUser) {
+      hashHistory.push('/login')
+      return
+    } // if not login, back to login page
+    if(Object.keys(cart.foods).length === 0) {
+      hashHistory.push('/')
+      return
+    } // if none food in cart, back to index page
     getFloors().then(result => {
       const floors = result.map(floor => {
         return floor.get('name')

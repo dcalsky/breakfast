@@ -26,11 +26,11 @@ class Home extends Component {
         this.props.handleFood.syncFoods(result)
       })
     }
-    if(!this.props.types.loaded) {
-      getTypes().then(result => {
-        this.props.handleType.syncTypes(result)
-      })
-    }
+    // if(!this.props.types.loaded) {
+    //   getTypes().then(result => {
+    //     this.props.handleType.syncTypes(result)
+    //   })
+    // }
     if(currentUser && !this.props.user.hadLogin) {
       let info = _.mapKeys(currentUser.attributes, function(value, key) {
         return key
