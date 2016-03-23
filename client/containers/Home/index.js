@@ -59,9 +59,6 @@ class Home extends Component {
     const {types, foods, cart} = this.props
     return (
       <div className="home">
-        <div className="home-type">
-          <TypeList types={types.content} active={types.active} handleSelectType={::this.handleSelectType} />
-        </div>
         <div className="home-food">
           <FoodList foods={foods.content} addFood={this.props.handleCart.addFood}  removeFood={this.props.handleCart.removeFood} cart={cart} />
         </div>
@@ -93,3 +90,9 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Home)
+
+/*
+* <div className="home-type">
+ <TypeList types={types.content} active={types.active} handleSelectType={::this.handleSelectType} />
+ </div>
+* */
