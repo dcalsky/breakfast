@@ -15,15 +15,24 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
   order.set('endDate', endDate.hours(7).minutes(0).second(0).toDate())
   if(couponId) {
     let coupon = new Coupon()
-    let couponDetail = new CouponDetail()
-    let relation = user.relation('coupon')
-    coupon.id = couponId
-    relation.remove(coupon)
-    couponDetail.set('coupon', coupon)
-    couponDetail.set('user', user)
-    couponDetail.save().then(result => {
-      let finalTotal = total - discount < 0 ? 0 : total - discount
-      order.set('total', finalTotal)
+    let query = new AV.Query('coupon')
+    query.equalTo('id', couponId)
+    query.find().then(_coupon => {
+      const couponNumber = _coupon.get('number')
+      if(couponNumber > 0) {
+        let couponDetail = new CouponDetail()
+        let relation = user.relation('coupon')
+        coupon.id = couponId
+        relation.remove(coupon)
+        couponDetail.set('coupon', coupon)
+        couponDetail.set('user', user)
+        couponDetail.save().then(result => {
+          let finalTotal = total - discount < 0 ? 0 : total - discount
+          order.set('total', finalTotal)
+          coupon.set('number', couponNumber - 1)
+          coupon.save()
+        })
+      }
     })
   }
 
