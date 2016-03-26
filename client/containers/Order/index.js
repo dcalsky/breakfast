@@ -87,6 +87,8 @@ class Order extends Component {
         this.props.handleOrder.createOrder({id: result.id, total: result.total})
         if(result.total === 0 ) {
           hashHistory.push({pathname: '/result', query: {result: true}})
+        } else {
+          hashHistory.push('/payment')
         }
       })
     }

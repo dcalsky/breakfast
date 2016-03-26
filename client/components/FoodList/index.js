@@ -4,6 +4,8 @@ import _ from 'lodash'
 import cx from 'classnames'
 import './style.styl'
 
+
+// 2016/3/25 remove onClick={this.skipFoodDetail.bind(this, id)} enter detail of food page
 export default React.createClass({
   skipFoodDetail(id) {
     hashHistory.push(`/foods/${id}`)
@@ -17,10 +19,24 @@ export default React.createClass({
           const count = _food ? _food.count : 0
           return (
             <li key={i} className="food-list-item">
-              <div className="food-info" onClick={this.skipFoodDetail.bind(this, id)}>
-                <div className="food-info-name">{name}</div>
-                <div className="food-info-sold">售出: {sold}份</div>
-                <div className="food-info-price"><i className="fa fa-jpy"></i> {price}</div>
+              <div className="food-info">
+                <div className="food-info-img">
+                  
+                </div>
+
+                <div className="food-info-name">
+                  {name}
+                </div>
+
+                <div className="food-info-sold">
+                  售出: {sold}份
+                </div>
+
+                <div className="food-info-price">
+                  <i className="fa fa-jpy"></i>
+                  {price}
+                </div>
+
               </div>
               <div className="food-info-button">
                 {

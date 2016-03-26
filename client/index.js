@@ -37,12 +37,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 )
-
 finish()
-
-
-/*
-* 2 + 1.5 + 1.5 = 5 // single one
-* 5 * (300) number = 1500 .
-*
-* */
