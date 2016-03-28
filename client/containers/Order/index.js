@@ -12,10 +12,9 @@ import { getTimeSlot } from '../../Api/time'
 import { getCurrentUser } from '../../Api/user'
 import * as CouponActions from '../../actions/coupon'
 import * as OrderActions from '../../actions/order'
-import CartList from '../../components/CartList'
 import DatePicker from 'react-datepicker'
-import style from './style.styl'
 import alipayImage from '../../images/alipay.png'
+import './style.styl'
 import './react-datepicker.css'
 
 const finalTime = 24 // We send final orders to vendor before 22:00
@@ -25,10 +24,9 @@ class Order extends Component {
     super(props)
     const { user, cart } = this.props
     const currentUser = getCurrentUser()
-    this.minStartDay = moment().hour() < finalTime ? 1 : 2  // If this moment late than 22:00, order is pull off to tomorrow
+    this.minStartDay = moment().hour() < finalTime ? 0 : 1  // If this moment late than 22:00, order is pull off to tomorrow
     this.state = {
-      startDate: moment().add(this.minStartDay, 'days'),
-      endDate: moment().add(this.minStartDay, 'days'),
+      startDate: moment().add(321, 'days'),
       days: 1,
       room: user.room,
       floor: user.floor || '西南一',
@@ -57,17 +55,22 @@ class Order extends Component {
     })
     getTimeSlot().then(result => {
       let timeSlot = []
+      let date = moment().add(this.minStartDay, 'days')
       result.map(time => {
         let moment1 = moment(), moment2 = moment()
         moment1.set('hour', parseInt(time.get('hours')))
         moment1.set('minute', parseInt(time.get('minutes')))
-        moment1.subtract(30, 'minute') // 提早30分钟提交订单给制作
+        moment1.subtract(30, 'minutes') // 提早30分钟提交订单给制作
         if(moment1 - moment2 > 0) {
           timeSlot.push(time)
         }
       })
+      date.set('hour', parseInt(timeSlot[0].get('hours')))
+      date.set('minute', parseInt(timeSlot[0].get('minutes')))
+      date.set('second', 0)
       this.setState({
-        timeSlot: timeSlot
+        timeSlot: timeSlot,
+        startDate: date
       })
     })
     hadCoupon(this.props.coupon.couponId, currentUser, result => {
@@ -111,28 +114,26 @@ class Order extends Component {
     }
 
   }
-  handleDateChange({ startDate, endDate }) {
-    startDate = startDate || this.state.startDate
-    endDate = endDate || this.state.endDate
-    if (startDate.isAfter(endDate)) {
-      let temp = startDate
-      startDate = endDate
-      endDate = temp
-    }
-    let days = endDate.diff(startDate, 'days') + 1
-    this.setState({ days, startDate, endDate })
+  handleDateChange(startDate) {
+    let date = this.state.startDate
+    date.set('year', startDate.year())
+    date.set('month', startDate.month())
+    date.set('date', startDate.date())
+    this.setState({
+      startDate : date
+    })
   }
-  handleTimeChange({hours, minute}) {
-    
+  handleTimeChange(e) {
+    let date = this.state.startDate
+    const time_array = e.target.value.split(':')
+    date.set('hour', time_array[0])
+    date.set('minute', time_array[1])
+    date.set('second', 0)
+    this.setState({
+      startDate: date
+    })
   }
 
-  handleChangeStart(startDate) {
-    this.handleDateChange({ startDate })
-  }
-
-  handleChangeEnd(endDate) {
-    this.handleDateChange({ endDate })
-  }
   handleChangeInput(type, e) {
     const value = e.target.value
     switch (type) {
@@ -159,6 +160,7 @@ class Order extends Component {
     hashHistory.push('/payment')
   }
   render() {
+    console.log(this.state.startDate)
     const { cart, coupon } = this.props
     return (
       <form className="order"  onSubmit={::this.handleCreateOrder}>
@@ -169,7 +171,7 @@ class Order extends Component {
               {
                 this.state.floors.map((floor, i) => {
                   return (
-                    <option key={`option-${i}`} value={floor}>{floor}</option>
+                    <option key={`floor-${i}`} value={floor}>{floor}</option>
                   )
                 })
               }
@@ -197,20 +199,20 @@ class Order extends Component {
             <span>日期</span>
             <DatePicker
               className="order-start-date"
-              dateFormat="YYYY/MM/DD HH:mm"
+              dateFormat="YYYY/MM/DD"
               selected={this.state.startDate}
               minDate={moment().add(this.minStartDay, 'days')}
-              onChange={::this.handleChangeStart}
+              onChange={::this.handleDateChange}
               popoverAttachment='top center'
               popoverTargetAttachment='bottom center'
               popoverTargetOffset='0px -80px' />
           </li>
           <li className="order-date-item">
             <span>时间</span>
-            <select value={this.state.couponId} onChange={::this.handleSelectCoupon}>
+            <select onChange={::this.handleTimeChange}>
               {
-                this.state.timeSlot.map(time => {
-                  return <option value={`${time.get('hours')}:${time.get('minutes')}`}>{`${time.get('hours')}:${time.get('minutes')}`}</option>
+                this.state.timeSlot.map((time, i) => {
+                  return <option key={`timeSlot-${i}`} value={`${time.get('hours')}:${time.get('minutes')}`}>{`${time.get('hours')}:${time.get('minutes')}`}</option>
                 })
               }
             </select>
@@ -223,9 +225,9 @@ class Order extends Component {
             <select value={this.state.couponId} onChange={::this.handleSelectCoupon}>
               <option value={null}>没有选择优惠券</option>
               {
-                coupon.coupons.map(coupon => {
+                coupon.coupons.map((coupon, i) => {
                   return (
-                    <option value={coupon.id}>{`${coupon.get('name')}/${coupon.get('discount')}元`}</option>
+                    <option key={`coupon-${i}`} value={coupon.id}>{`${coupon.get('name')}/${coupon.get('discount')}元`}</option>
                   )
                 })
               }
