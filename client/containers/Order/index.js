@@ -8,6 +8,7 @@ import { hadCoupon, addCoupon, fetchCoupon } from '../../Api/coupon'
 import { createOrder } from '../../Api/order'
 import { isPhoneNumber, isLegalName, isLegalPassword } from '../../actions/common'
 import { getFloors } from '../../Api/floor'
+import { getTimeSlot } from '../../Api/time'
 import { getCurrentUser } from '../../Api/user'
 import * as CouponActions from '../../actions/coupon'
 import * as OrderActions from '../../actions/order'
@@ -17,7 +18,7 @@ import style from './style.styl'
 import alipayImage from '../../images/alipay.png'
 import './react-datepicker.css'
 
-const finalTime = 22 // We send final orders to vendor before 22:00
+const finalTime = 24 // We send final orders to vendor before 22:00
 
 class Order extends Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class Order extends Component {
       mobilePhoneNumber: user.mobilePhoneNumber,
       name: user.name,
       floors: [],
+      timeSlot: [],
       buttonDisabled: false,
       couponId: null
     }
@@ -51,6 +53,21 @@ class Order extends Component {
       })
       this.setState({
         floors: floors
+      })
+    })
+    getTimeSlot().then(result => {
+      let timeSlot = []
+      result.map(time => {
+        let moment1 = moment(), moment2 = moment()
+        moment1.set('hour', parseInt(time.get('hours')))
+        moment1.set('minute', parseInt(time.get('minutes')))
+        moment1.subtract(30, 'minute') // 提早30分钟提交订单给制作
+        if(moment1 - moment2 > 0) {
+          timeSlot.push(time)
+        }
+      })
+      this.setState({
+        timeSlot: timeSlot
       })
     })
     hadCoupon(this.props.coupon.couponId, currentUser, result => {
@@ -104,6 +121,9 @@ class Order extends Component {
     }
     let days = endDate.diff(startDate, 'days') + 1
     this.setState({ days, startDate, endDate })
+  }
+  handleTimeChange({hours, minute}) {
+    
   }
 
   handleChangeStart(startDate) {
@@ -173,39 +193,35 @@ class Order extends Component {
         </ul>
 
         <ul className="order-date">
-        <li className="order-date-item">
-          <span>起送时间</span>
-          <DatePicker
-            className="order-start-date"
-            selected={this.state.startDate}
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
-            minDate={moment().add(this.minStartDay, 'days')}
-            onChange={::this.handleChangeStart}
-            popoverAttachment='top center'
-            popoverTargetAttachment='bottom center'
-            popoverTargetOffset='0px -80px' />
-        </li>
           <li className="order-date-item">
-            <span>结束时间</span>
+            <span>日期</span>
             <DatePicker
-              className="order-end-date"
-              selected={this.state.endDate}
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
+              className="order-start-date"
+              dateFormat="YYYY/MM/DD HH:mm"
+              selected={this.state.startDate}
               minDate={moment().add(this.minStartDay, 'days')}
-              onChange={::this.handleChangeEnd}
+              onChange={::this.handleChangeStart}
               popoverAttachment='top center'
               popoverTargetAttachment='bottom center'
-              popoverTargetOffset='0px -80px'/>
+              popoverTargetOffset='0px -80px' />
           </li>
-      </ul>
+          <li className="order-date-item">
+            <span>时间</span>
+            <select value={this.state.couponId} onChange={::this.handleSelectCoupon}>
+              {
+                this.state.timeSlot.map(time => {
+                  return <option value={`${time.get('hours')}:${time.get('minutes')}`}>{`${time.get('hours')}:${time.get('minutes')}`}</option>
+                })
+              }
+            </select>
+          </li>
+        </ul>
 
         <ul className="order-pay">
           <li className="order-coupon-item">
             <span>优惠券</span>
             <select value={this.state.couponId} onChange={::this.handleSelectCoupon}>
-              <option value={null}>选择优惠券</option>
+              <option value={null}>没有选择优惠券</option>
               {
                 coupon.coupons.map(coupon => {
                   return (
@@ -268,3 +284,18 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Order)
+
+
+/*<li className="order-date-item">
+ <span>结束时间</span>
+ <DatePicker
+ className="order-end-date"
+ selected={this.state.endDate}
+ startDate={this.state.startDate}
+ endDate={this.state.endDate}
+ minDate={moment().add(this.minStartDay, 'days')}
+ onChange={::this.handleChangeEnd}
+ popoverAttachment='top center'
+ popoverTargetAttachment='bottom center'
+ popoverTargetOffset='0px -80px'/>
+ </li>*/
