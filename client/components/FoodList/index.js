@@ -14,16 +14,15 @@ export default React.createClass({
     return (
       <ul className="food-list">
         {this.props.foods.map((food, i) => {
-          const name = food.get('name'), desc = food.get('desc'), price = food.get('price'), id = food.id, sold = food.get('sold')
+          const name = food.get('name'), desc = food.get('desc'), price = food.get('price'), id = food.id, sold = food.get('sold'), img = food.get('image')
           const _food = _.find(this.props.cart.foods, {id: id})
           const count = _food ? _food.count : 0
           return (
             <li key={i} className="food-list-item">
+              <div className="food-image">
+                <img src={img} alt=""/>
+              </div>
               <div className="food-info">
-                <div className="food-info-img">
-                  
-                </div>
-
                 <div className="food-info-name">
                   {name}
                 </div>
