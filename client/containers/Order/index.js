@@ -26,7 +26,8 @@ class Order extends Component {
     const currentUser = getCurrentUser()
     this.minStartDay = moment().hour() < finalTime ? 0 : 1  // If this moment late than 22:00, order is pull off to tomorrow
     this.state = {
-      startDate: moment().add(321, 'days'),
+      startDate: moment().add(this.minStartDay, 'days'),
+      endDate: moment().add(2, 'days'),
       days: 1,
       room: user.room,
       floor: user.floor || '西南一',
@@ -116,11 +117,10 @@ class Order extends Component {
   }
   handleDateChange(startDate) {
     let date = this.state.startDate
-    date.set('year', startDate.year())
-    date.set('month', startDate.month())
-    date.set('date', startDate.date())
+    startDate.set('hour', date.hour())
+    startDate.set('minute', date.minute())
     this.setState({
-      startDate : date
+      startDate : startDate
     })
   }
   handleTimeChange(e) {
@@ -160,7 +160,6 @@ class Order extends Component {
     hashHistory.push('/payment')
   }
   render() {
-    console.log(this.state.startDate)
     const { cart, coupon } = this.props
     return (
       <form className="order"  onSubmit={::this.handleCreateOrder}>
