@@ -1,8 +1,9 @@
 import AV from 'avoscloud-sdk'
+import _ from 'lodash'
 import { Order, Food, OrderDetail, Coupon, CouponDetail } from './init'
 // todo[1]: all mistakes should be added
 
-export const createOrder = (total, foods, startDate, endDate, floor, room, name, phone, couponId, discount, callback) => {
+export const createOrder = (total, foods, startDate, floor, room, name, phone, couponId, discount, callback) => {
   let order = new Order()
   let user = AV.User.current()
   order.set('total', total)
@@ -11,14 +12,13 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
   order.set('room', room)
   order.set('name', name)
   order.set('phone', phone)
-  order.set('startDate', startDate.hours(7).minute(0).second(0).toDate())
-  order.set('endDate', endDate.hours(7).minutes(0).second(0).toDate())
+  order.set('startDate', startDate.second(0).toDate())
   if(couponId) {
     let coupon = new Coupon()
-    let query = new AV.Query('coupon')
-    query.equalTo('id', couponId)
+    let query = new AV.Query('Coupon')
+    query.equalTo('objectId', couponId)
     query.find().then(_coupon => {
-      const couponNumber = _coupon.get('number')
+      const couponNumber = _coupon[0].get('number')
       if(couponNumber > 0) {
         let couponDetail = new CouponDetail()
         let relation = user.relation('coupon')
@@ -27,32 +27,57 @@ export const createOrder = (total, foods, startDate, endDate, floor, room, name,
         couponDetail.set('coupon', coupon)
         couponDetail.set('user', user)
         couponDetail.save().then(result => {
-          let finalTotal = total - discount < 0 ? 0 : total - discount
-          order.set('total', finalTotal)
+          const finalTotal = _.round(total - discount, 1) <= 0 ? 0 : total - discount
+          order.set('discount', discount)
+          if(finalTotal === 0) {
+            order.set('paid', true)
+          }
           coupon.set('number', couponNumber - 1)
-          coupon.save()
+          coupon.save().then(() => {
+            foods.map(element => {
+              let detail = new OrderDetail()
+              let food = new Food()
+              food.id = element.id
+              detail.set('food', food)
+              detail.set('count', element.count)
+              detail.set('order', order)
+              detail.save()
+            })
+            order.save().then(result => {
+              if(result.id) {
+                user.set('name', name)
+                user.save().then(() => {
+                  callback({id: result.id, total: finalTotal})
+                })
+              }
+            })
+          })
+        })
+      } else {
+        // todo coupon number is empty
+      }
+    })
+  } else {
+    foods.map(element => {
+      let detail = new OrderDetail()
+      let food = new Food()
+      food.id = element.id
+      detail.set('food', food)
+      detail.set('count', element.count)
+      detail.set('order', order)
+      detail.save()
+    })
+    order.save().then(result => {
+      if(result.id) {
+        user.set('name', name)
+        user.save().then(() => {
+          callback({id: result.id, total: result.get('total')})
         })
       }
     })
   }
 
-  foods.map(element => {
-    let detail = new OrderDetail()
-    let food = new Food()
-    food.id = element.id
-    detail.set('food', food)
-    detail.set('count', element.count)
-    detail.set('order', order)
-    detail.save()
-  })
-  order.save().then(result => {
-    if(result.id) {
-      user.set('name', name)
-      user.save().then(() => {
-        callback({id: result.id, total: result.get('total')})
-      })
-    }
-  })
+
 }
 
 

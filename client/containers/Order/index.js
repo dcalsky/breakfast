@@ -104,7 +104,7 @@ class Order extends Component {
       const total = _.round(this.state.days * cart.total, 1)
       const coupon = _.find(this.props.coupon.coupons, {id: this.state.couponId})
       const discount = coupon ? coupon.get('discount') : 0
-      createOrder(total, cart.foods, this.state.startDate, this.state.endDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, this.state.couponId, discount, result => {
+      createOrder(total, cart.foods, this.state.startDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, this.state.couponId, discount, result => {
         this.props.handleOrder.createOrder({id: result.id, total: result.total})
         if(result.total === 0 ) {
           hashHistory.push({pathname: '/result', query: {result: true}})
