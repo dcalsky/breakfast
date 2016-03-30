@@ -7,8 +7,8 @@ import _ from 'lodash'
 import * as FoodActions from '../../actions/foods'
 import * as TypeActions from '../../actions/types'
 import * as CartActions from '../../actions/cart'
-// import * as UserActions from '../../actions/user'
-// import { getTypes, getFoods } from '../../Api/food'
+import * as UserActions from '../../actions/user'
+import { getTypes, getFoods } from '../../Api/food'
 
 class Foods extends Component {
   constructor(props) {
