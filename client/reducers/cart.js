@@ -48,5 +48,8 @@ export default handleActions({
     } else {
       return state
     }
+  },
+  'clear food' (state, action) {
+    return initialState
   }
 }, initialState)

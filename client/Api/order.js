@@ -38,10 +38,13 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, c
               let detail = new OrderDetail()
               let food = new Food()
               food.id = element.id
-              detail.set('food', food)
-              detail.set('count', element.count)
-              detail.set('order', order)
-              detail.save()
+              new AV.Query('Food').get(food.id).then(_food => {
+                detail.set('name', _food.get('name'))
+                detail.set('food', food)
+                detail.set('count', element.count)
+                detail.set('order', order)
+                detail.save()
+              });
             })
             order.save().then(result => {
               if(result.id) {
@@ -62,10 +65,13 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, c
       let detail = new OrderDetail()
       let food = new Food()
       food.id = element.id
-      detail.set('food', food)
-      detail.set('count', element.count)
-      detail.set('order', order)
-      detail.save()
+      new AV.Query('Food').get(food.id).then(_food => {
+        detail.set('name', _food.get('name'))
+        detail.set('food', food)
+        detail.set('count', element.count)
+        detail.set('order', order)
+        detail.save()
+      });
     })
     order.save().then(result => {
       if(result.id) {
