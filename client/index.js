@@ -12,7 +12,8 @@ import Order from './containers/Order'
 import Login from './containers/Login'
 import Result from './containers/Result'
 import Payment from './containers/Payment'
-import LoginWithPhone from './containers/Login/'
+import User from './containers/User'
+// import LoginWithPhone from './containers/Login/'
 import configure from './store'
 
 const store = configure(Immutable.fromJS({}))
@@ -25,6 +26,7 @@ ReactDOM.render(
         <Route path="/order" component={Order} />
         <Route path="/payment" component={Payment} />
         <Route path="/result" component={Result} />
+        <Route path="/user" component={User} />
         <Route path="/login" component={Login}>
           <Route path="/login/:type" />
         </Route>

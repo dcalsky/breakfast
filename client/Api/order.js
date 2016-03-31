@@ -3,6 +3,14 @@ import _ from 'lodash'
 import { Order, Food, OrderDetail, Coupon, CouponDetail } from './init'
 // todo[1]: all mistakes should be added
 
+export const getOrderDetail = orderId => {
+  let order = new Order()
+  let query_detail = new AV.Query('OrderDetail')
+  order.id = orderId
+  query_detail.equalTo('order', order)
+  return query_detail.find()
+}
+
 export const createOrder = (total, foods, startDate, floor, room, name, phone, couponId, discount, callback) => {
   let order = new Order()
   let user = AV.User.current()

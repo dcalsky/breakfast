@@ -15,6 +15,9 @@ export default React.createClass({
   skipToLogin() {
     hashHistory.push('/login')
   },
+  skipUserInfo() {
+    hashHistory.push('/user')
+  },
   handleLogout() {
     this.props.logout()
     this.setState({
@@ -47,7 +50,7 @@ export default React.createClass({
         title = '付款成功'
         break
       default :
-        title = '设置'
+        title = '用户界面'
         break
     }
     return (
@@ -63,10 +66,16 @@ export default React.createClass({
         <h3>{title}</h3>
         {
           (this.state.hadLogin || getCurrentUser()) ?
-            <div className="user-icon" onClick={this.handleLogout}>
-              <i className="fa fa-sign-out"></i>
-              注销
-            </div>
+            this.props.path === '/user' ?
+              <div className="user-icon" onClick={this.handleLogout}>
+                <i className="fa fa-sign-out"></i>
+                注销
+              </div>
+              :
+              <div className="user-icon" onClick={this.skipUserInfo}>
+                <i className="fa fa-user"></i>
+                我的
+              </div>
             :
             this.props.path !== '/login' && this.props.path !== '/login/phone' ?
               <div className="user-icon" onClick={this.skipToLogin}>

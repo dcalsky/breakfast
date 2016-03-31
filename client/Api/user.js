@@ -1,7 +1,8 @@
 import AV from 'avoscloud-sdk'
+import { Order } from './init'
 // todo[1]: all mistakes should be added
 // todo[2]: all action trigger before checking hadLogin property
-const Coupon = AV.Object.extend('Coupon')
+
 
 export const login = (username, password) => {
     return AV.User.logIn(username, password)
@@ -30,6 +31,25 @@ export const register = (username, password) => {
 //export const updateInfo = (username, newInfo) => {
 //
 //}
+
+export const getUserInfo = (user) => {
+  let result = [];
+  let query_order = new AV.Query('Order')
+  query_order.equalTo('owner', user)
+  query_order.addDescending('startDate')
+  query_order.limit(8)
+  return query_order.find()
+  //   .then(orders => {
+  //   callback(orders)
+  //   // orders.map(order => {
+  //   //   let query_detail = new AV.Query('OrderDetail')
+  //   //   query_detail.equalTo('order', order)
+  //   //   query_detail.find().then(details => {
+  //   //     order.details = details
+  //   //   })
+  //   // })
+  // })
+}
 
 export const logout = () => {
   // logout
