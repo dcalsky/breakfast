@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { hashHistory } from 'react-router'
-// import cx from 'classnames'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as FoodActions from '../../actions/foods'
 import * as TypeActions from '../../actions/types'
 import * as CartActions from '../../actions/cart'
 import * as UserActions from '../../actions/user'
-import { getTypes, getFoods } from '../../Api/food'
+import { getFoods } from '../../Api/food'
 import { getCurrentUser } from '../../Api/user'
-// import TypeList from '../../components/TypeList'
 import FoodList from '../../components/FoodList'
 import Cart from '../../components/Cart'
 import './style.styl'
+// import TypeList from '../../components/TypeList'
+// import cx from 'classnames'
 
 class Home extends Component {
   constructor(props) {

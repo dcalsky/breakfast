@@ -33,7 +33,6 @@ class User extends Component {
   }
   handleGetDetail(id) {
     getOrderDetail(id).then(detail => {
-      console.log(detail)
       this.setState({
         detail: detail,
         currentId: id

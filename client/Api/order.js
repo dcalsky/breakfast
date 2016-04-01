@@ -53,7 +53,9 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, c
                 detail.set('food', food)
                 detail.set('count', element.count)
                 detail.set('order', order)
-                detail.save()
+                detail.save().then(() => {
+                  console.log('detail completed')
+                })
               });
             })
             order.save().then(result => {
@@ -82,7 +84,9 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, c
         detail.set('food', food)
         detail.set('count', element.count)
         detail.set('order', order)
-        detail.save()
+        detail.save().then(() => {
+          console.log('detail completed')
+        })
       });
     })
     order.save().then(result => {

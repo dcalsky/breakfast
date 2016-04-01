@@ -17,7 +17,7 @@ import alipayImage from '../../images/alipay.png'
 import './style.styl'
 import './react-datepicker.css'
 
-const finalTime = 24 // We send final orders to vendor before 22:00
+const finalTime = 23 // We send final orders to vendor before 22:00
 
 class Order extends Component {
   constructor(props) {
@@ -27,7 +27,6 @@ class Order extends Component {
     this.minStartDay = moment().hour() < finalTime ? 0 : 1  // If this moment late than 22:00, order is pull off to tomorrow
     this.state = {
       startDate: moment().add(this.minStartDay, 'days'),
-      endDate: moment().add(2, 'days'),
       days: 1,
       room: user.room,
       floor: user.floor || '西南一',
@@ -36,7 +35,9 @@ class Order extends Component {
       floors: [],
       timeSlot: [],
       buttonDisabled: false,
-      couponId: null
+      couponId: null,
+      couponDiscount: 0,
+      fare: 0.5
     }
     if(!currentUser) {
       hashHistory.push('/login')
@@ -62,7 +63,7 @@ class Order extends Component {
         moment1.set('hour', parseInt(time.get('hours')))
         moment1.set('minute', parseInt(time.get('minutes')))
         moment1.subtract(30, 'minutes') // 提早30分钟提交订单给制作
-        if(moment1 - moment2 > 0) {
+        if(moment1 - moment2 > 0 || this.minStartDay === 1) { // 早于时间档 或者 过了finalTime 就加入
           timeSlot.push(time)
         }
       })
@@ -101,10 +102,8 @@ class Order extends Component {
       this.setState({
         buttonDisabled: true
       })
-      const total = _.round(this.state.days * cart.total, 1)
-      const coupon = _.find(this.props.coupon.coupons, {id: this.state.couponId})
-      const discount = coupon ? coupon.get('discount') : 0
-      createOrder(total, cart.foods, this.state.startDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, this.state.couponId, discount, result => {
+      const total = _.round(this.state.days * cart.total + this.state.fare, 1)
+      createOrder(total, cart.foods, this.state.startDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, this.state.couponId, this.state.couponDiscount, result => {
         this.props.handleOrder.createOrder({id: result.id, total: result.total})
         if(result.total === 0 ) {
           hashHistory.push({pathname: '/result', query: {result: true}})
@@ -152,8 +151,11 @@ class Order extends Component {
     }
   }
   handleSelectCoupon(e) {
+    const coupon = _.find(this.props.coupon.coupons, {id: this.state.couponId})
+    const discount = coupon ? coupon.get('discount') : 0
     this.setState({
-      couponId: e.target.value
+      couponId: e.target.value,
+      couponDiscount: discount
     })
   }
   skipPayment() {
@@ -248,12 +250,25 @@ class Order extends Component {
             )
           })}
           <li className="order-amount-days">
-            <span>送餐天数</span>
-            <span style={{float: 'right'}}>{this.state.days} 天</span>
+          <span>送餐天数</span>
+          <span style={{float: 'right'}}>{this.state.days} 天</span>
+        </li>
+          <li className="order-amount-fare">
+            <span>运费</span>
+            <span style={{float: 'right'}}>{this.state.fare}元</span>
           </li>
+          {
+            this.state.couponDiscount != 0 ?
+              <li className="order-amount-discount">
+                <span>优惠</span>
+                <span style={{float: 'right'}}>{this.state.couponDiscount}</span>
+              </li>
+              :
+              null
+          }
           <li className="order-amount-days">
             <span>共计</span>
-            <span style={{float: 'right'}}>{_.round(this.state.days * cart.total, 1)}元</span>
+            <span style={{float: 'right'}}>{_.round(this.state.days * cart.total - this.state.couponDiscount  + this.state.fare, 1)}元</span>
           </li>
         </ul>
         <div className="pay">
