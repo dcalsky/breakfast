@@ -1,21 +1,21 @@
-
+import Immutable from 'immutable'
 import { handleActions } from 'redux-actions'
 
-const initialState = {
+const initialState = Immutable.fromJS({
   couponId: null,
   coupons: []
-}
+})
 
 
 export default handleActions({
   'had coupon' (state, action) {
-    return {
+    return state.merge({
       couponId: action.payload
-    }
+    })
   },
   'fetch coupon' (state, action) {
-    return {
+    return state.merge({
       coupons: action.payload
-    }
+    })
   }
 }, initialState)

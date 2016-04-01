@@ -285,7 +285,7 @@ function mapStateToProps(state) {
     cart: state.get('cart').toJS(),
     user: state.get('user').toJS(),
     order: state.get('order'),
-    coupon: state.get('coupon')
+    coupon: state.get('coupon').toJS()
   }
 }
 

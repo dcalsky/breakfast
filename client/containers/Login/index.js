@@ -13,7 +13,7 @@ import style from './style.styl'
 class Login extends Component {
   constructor(props) {
     super(props)
-    const coupon = this.props.location.query.coupon
+    const couponId = this.props.location.query.coupon
     this.state = {
       username: '',
       password: '',
@@ -21,8 +21,8 @@ class Login extends Component {
       waitingTime: 0,
       key: null
     }
-    if(coupon) {
-      this.props.handleCoupon.hadCoupon(coupon)
+    if(couponId) {
+      this.props.handleCoupon.hadCoupon(couponId)
     }
     if(getCurrentUser()) {
       hashHistory.push('/')
@@ -118,7 +118,7 @@ class Login extends Component {
 function mapStateToProps(state) {
   return {
     user: state.get('user').toJS(),
-    coupon: state.coupon
+    coupon: state.get('coupon').toJS()
   }
 }
 
