@@ -47,6 +47,8 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, c
               let food = new Food()
               food.id = element.id
               new AV.Query('Food').get(food.id).then(_food => {
+                const sold = _food.get('sold')
+                food.set('sold', parseInt(sold) + element.count)
                 detail.set('name', _food.get('name'))
                 detail.set('food', food)
                 detail.set('count', element.count)
@@ -74,6 +76,8 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, c
       let food = new Food()
       food.id = element.id
       new AV.Query('Food').get(food.id).then(_food => {
+        const sold = _food.get('sold')
+        food.set('sold', parseInt(sold) + element.count)
         detail.set('name', _food.get('name'))
         detail.set('food', food)
         detail.set('count', element.count)
