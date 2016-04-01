@@ -45,13 +45,10 @@
   },
   "dependencies": {
     "avoscloud-sdk": "^0.6.9",
-    "classnames": "^2.2.3",
     "immutable": "^3.7.6",
     "lodash": "^4.6.1",
     "moment": "^2.12.0",
     "react-datepicker": "^0.24.0",
-    "redux-immutable": "^3.0.6",
-    "redux-immutablejs": "0.0.8",
     "redux-thunk": "^2.0.1"
   }
 }
