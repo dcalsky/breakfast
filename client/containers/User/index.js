@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Immutable from 'immutable'
 import { hashHistory } from 'react-router'
 import moment from 'moment'
 import { bindActionCreators } from 'redux'
@@ -50,7 +49,7 @@ class User extends Component {
       <div className="user">
         <ul className="user-order-list">
           {this.state.orders.map((order, i) => {
-            const orderDate = Immutable.fromJS(moment(order.get('startDate')))
+            const orderDate = moment(order.get('startDate'))
             const finalDate = moment(order.get('startDate')).subtract(35, 'minutes')
             return (
               <li key={`user-order-${i}`} className="user-order-item" onClick={this.handleGetDetail.bind(this, order.id)}>
