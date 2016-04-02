@@ -28,9 +28,6 @@ export const register = (username, password) => {
   return AV.User.signUp(username, password)
 }
 
-//export const updateInfo = (username, newInfo) => {
-//
-//}
 
 export const getUserInfo = (user) => {
   let query_order = new AV.Query('Order')
@@ -38,23 +35,8 @@ export const getUserInfo = (user) => {
   query_order.addDescending('createdAt')
   query_order.limit(8)
   return query_order.find()
-  //   .then(orders => {
-  //   callback(orders)
-  //   // orders.map(order => {
-  //   //   let query_detail = new AV.Query('OrderDetail')
-  //   //   query_detail.equalTo('order', order)
-  //   //   query_detail.find().then(details => {
-  //   //     order.details = details
-  //   //   })
-  //   // })
-  // })
 }
 
 export const logout = () => {
   // logout
-}
-
-export const getOrder = username => {
-  // AV.User.getCurrentUser
-  // getOrder
 }

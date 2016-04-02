@@ -49,8 +49,11 @@ export default React.createClass({
       case '/result':
         title = '付款成功'
         break
+      case '/user':
+        title = '近期订单'
+        break
       default :
-        title = '用户界面'
+        title = '其他'
         break
     }
     return (

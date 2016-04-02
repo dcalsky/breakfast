@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import Immutable from 'immutable'
 import { hashHistory } from 'react-router'
 import moment from 'moment'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as UserActions from '../../actions/user'
+import * as OrderActions from '../../actions/order'
 import { getOrderDetail } from '../../Api/order'
 import { getCurrentUser, getUserInfo } from '../../Api/user'
 import './style.styl'
@@ -39,16 +41,22 @@ class User extends Component {
       })
     })
   }
+  handlePay(id, total) {
+    this.props.handleOrder.createOrder({id: id, total: total})
+    hashHistory.push('/payment')
+  }
   render() {
     return (
       <div className="user">
         <ul className="user-order-list">
           {this.state.orders.map((order, i) => {
+            const orderDate = Immutable.fromJS(moment(order.get('startDate')))
+            const finalDate = moment(order.get('startDate')).subtract(35, 'minutes')
             return (
               <li key={`user-order-${i}`} className="user-order-item" onClick={this.handleGetDetail.bind(this, order.id)}>
                 <div className="order-base">
                   <p className="base-title">{order.get('name')} {order.get('floor')} {order.get('room')}的订单</p>
-                  <p className="base-time">时间: {moment(order.get('startDate')).format('YYYY/MM/DD HH:mm')}</p>
+                  <p className="base-time">时间: {orderDate.format('YYYY/MM/DD HH:mm')}</p>
                 </div>
                 <div className="order-status">
                   <p className="status-price">￥{order.get('total')}</p>
@@ -56,7 +64,12 @@ class User extends Component {
                     order.get('paid') ?
                       <p className="status-paid">已付款</p>
                       :
-                      <p className="status-unpaid">未付款</p>
+                      finalDate - moment() < 0 ?
+                        <p className="status-overdue">已过期</p>
+                        :
+                        <button onClick={this.handlePay.bind(this, order.id, order.get('total'))}>付款</button>
+
+
                   }
                 </div>
                 {
@@ -91,7 +104,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleUser: bindActionCreators(UserActions, dispatch)
+    handleUser: bindActionCreators(UserActions, dispatch),
+    handleOrder: bindActionCreators(OrderActions, dispatch),
   }
 }
 
