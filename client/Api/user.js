@@ -33,10 +33,9 @@ export const register = (username, password) => {
 //}
 
 export const getUserInfo = (user) => {
-  let result = [];
   let query_order = new AV.Query('Order')
   query_order.equalTo('owner', user)
-  query_order.addDescending('startDate')
+  query_order.addDescending('createdAt')
   query_order.limit(8)
   return query_order.find()
   //   .then(orders => {
