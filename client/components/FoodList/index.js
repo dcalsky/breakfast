@@ -1,7 +1,6 @@
 import React from 'react'
 import { hashHistory } from 'react-router'
 import _ from 'lodash'
-import cx from 'classnames'
 import './style.styl'
 
 
