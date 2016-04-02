@@ -47,6 +47,7 @@ class Order extends Component {
       hashHistory.push('/')
       return
     } // if none food in cart, back to index page
+    window.document.body.scrollTop = 0 // back to top
     getFloors().then(result => {
       const floors = result.map(floor => {
         return floor.get('name')
