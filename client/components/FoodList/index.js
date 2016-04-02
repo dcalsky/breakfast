@@ -1,7 +1,12 @@
 import React from 'react'
 import { hashHistory } from 'react-router'
+import ImageLoader from 'react-imageloader';
 import _ from 'lodash'
 import './style.styl'
+
+const preloader = () => {
+  return <img src="http://7xrq8g.com1.z0.glb.clouddn.com/default_image_small.png" alt="Food image" />
+}
 
 
 // 2016/3/25 remove onClick={this.skipFoodDetail.bind(this, id)} enter detail of food page
@@ -19,7 +24,11 @@ export default React.createClass({
           return (
             <li key={i} className="food-list-item">
               <div className="food-image">
-                <img src={img} alt=""/>
+                <ImageLoader
+                  src={img}
+                  preloader={preloader}>
+                  Image load failed!
+                </ImageLoader>
               </div>
               <div className="food-info">
                 <div className="food-info-name">

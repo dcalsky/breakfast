@@ -8,7 +8,7 @@ var path = require('path')
 module.exports = {
   entry: {
     jsx: ['webpack-dev-server/client?http://0.0.0.0:3002', 'webpack/hot/only-dev-server', './client/index.js'],
-    vendor: ['react', 'redux', 'moment', 'lodash', 'react-router']
+    vendor: ['react', 'redux', 'moment', 'lodash', 'react-router', 'avoscloud-sdk']
   },
   output: {
     filename: 'bundle.js'

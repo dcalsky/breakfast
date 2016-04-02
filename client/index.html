@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>同济早餐</title>
+    <title>有料 Yoliao</title>
     <meta name="author" content="Dcalsky">
-    <meta name="description" content="breakfast">
+    <meta name="description" content="YOLIAO">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css">
 
@@ -45,6 +45,11 @@
       var finish = function() {
         document.body.removeChild(loading)
         root.removeAttribute('style')
+      }
+      if (window.attachEvent) {
+        window.attachEvent("onload", finish);
+      } else if (window.addEventListener) {
+        window.addEventListener("load", finish, false);
       }
     </script>
     <script type='application/javascript' src="http://cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script>

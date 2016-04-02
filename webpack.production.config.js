@@ -9,11 +9,11 @@ module.exports = {
   context: path.join(__dirname, './client'),
   entry: {
     app: './index.js',
-    vendor: ['react', 'redux', 'moment', 'lodash', 'react-router']
+    vendor: ['react', 'redux', 'moment', 'lodash', 'react-router', 'avoscloud-sdk']
   },
   output: {
     path: path.join(__dirname, './static'),
-    filename: 'bundle.[hash].js',
+    filename: 'bundle.[hash].js'
   },
   module: {
     loaders: [
@@ -64,7 +64,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './index.html',
-      inject: 'body'
+      inject: 'body',
     }),
   ],
 }
