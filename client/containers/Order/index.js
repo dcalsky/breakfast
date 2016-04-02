@@ -272,7 +272,7 @@ class Order extends Component {
           </li>
         </ul>
         <div className="pay">
-          <button type="submit" disabled={this.state.buttonDisabled}>确认下单</button>
+          <button type="submit" disabled={this.state.buttonDisabled}>{this.state.buttonDisabled ? '正在下单...' : '确认下单'}</button>
         </div>
       </form>
     )

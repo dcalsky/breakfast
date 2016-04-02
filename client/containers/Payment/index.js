@@ -11,11 +11,21 @@ const partner_id = "2088221435928705"
 
 class Payment extends Component {
   //          .send({out_trade_no: result.id, subject: '食物订单', seller_id: '2088221435928705', total_fee: total, body: '普通食物订单', show_url: '1'})
-
+  constructor(props) {
+    super(props)
+    this.state = {
+      buttonDisabled: false
+    }
+  }
+  handleFormSubmit() {
+    this.setState({
+      buttonDisabled: true
+    })
+  }
   render() {
     if(this.props.order && Object.keys(this.props.order).length === 2) {
       return (
-        <form className="payment" action={payURL} method="post" target="_self">
+        <form className="payment" action={payURL} method="post" target="_self" onSubmit={::this.handleFormSubmit}>
           <input type="hidden" name="out_trade_no" value={this.props.order.id} />
           <input type="hidden" name="subject" value="同济外卖食物"/>
           <input type="hidden" name="seller_id" value={partner_id} />
@@ -23,7 +33,7 @@ class Payment extends Component {
           <input type="hidden" name="body" value="普通食物订单" />
           <input type="hidden" name="show_url" value="1" />
           <h3>共计: {this.props.order.total} 元</h3>
-          <button type="submit">确认付款</button>
+          <button type="submit" disabled={this.state.buttonDisabled}>{this.state.buttonDisabled ? '正在跳转至支付宝...' : '确认支付'}</button>
         </form>
       )
     } else {
