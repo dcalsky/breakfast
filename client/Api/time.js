@@ -4,5 +4,6 @@ import { TimeSlot } from './init'
 
 export const getTimeSlot = () => {
   const query = new AV.Query('TimeSlot')
+  query.addAscending('hours')
   return query.find()
 }
