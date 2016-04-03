@@ -6,8 +6,8 @@
 
 .food-list-item
   position relative
-  padding: 1.2rem .3rem
-  height 6rem
+  padding 1.2rem .3rem
+  min-height 6rem
   border-bottom 1px solid #eee
   cursor pointer
 
@@ -22,7 +22,7 @@
   position relative
   padding 0 1rem
   div
-    margin .3rem
+    margin .2rem
   .food-info-name
     font-size 1.2rem
     font-weight 400
@@ -30,6 +30,8 @@
     color tomato
     font-size 1.4rem
     font-weight 500
+    span
+      padding-left .2rem
   .food-info-sold
     font-size .8rem
     color #6b6b6b
@@ -38,14 +40,35 @@
 .food-info-button
     position absolute
     right 10px
-    bottom 20px
+    top 80px
+    .minus
+      border 1px solid #1976d2
+      background #fff
+      color #1976d2
     button
       border none
       outline none
       height 2rem
       width 2rem
-      background #1967d2
+      background #1976d2
       border-radius 50%
       color #fff
       margin 0 .2rem
       z-index 30
+
+
+.food-info-ingredient
+  button
+    border 1px solid #eee
+    border-radius 5px
+    background #fff
+    outline none
+    color #333
+    z-index 30
+
+
+.ingredient-list
+  margin-top .6rem
+  padding .4rem
+  .ingredient-item
+    margin .4rem 0
