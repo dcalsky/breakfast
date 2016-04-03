@@ -5,8 +5,8 @@ export default React.createClass({
   render() {
     return (
       <span>
-          <input className='tgl tgl-ios' id='cb2' type='checkbox' onChange={this.props.onChange} />
-          <label className='tgl-btn' htmlFor='cb2'></label>
+          <input className='tgl tgl-ios' id={this.props.id} type='checkbox' checked={this.props.checked} onChange={this.props.onChange} />
+          <label className='tgl-btn' htmlFor={this.props.id}></label>
       </span>
 
     )

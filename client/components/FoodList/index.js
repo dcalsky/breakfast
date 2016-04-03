@@ -127,10 +127,12 @@ export default React.createClass({
                 isExpand ?
                   <ul className="ingredient-list" style={{marginTop: this.state.ingredients.length === 0 ? 0 : '0.4rem' }}>
                     {this.state.ingredients.map((ingredient, i) => {
+                      const toggleChecked = _.find(_food.ingredients, {id: ingredient.id}) ? true : false
+                      console.log(toggleChecked)
                       return (
                         <li className="ingredient-item" key={`ingredient-${i}`}>
                           <div className="ingredient-toggle">
-                            <Toggle onChange={this.handleAddIngredient.bind(this, {id, ingredient})} />
+                            <Toggle id={`ingredient-${i}`} checked={toggleChecked} onChange={this.handleAddIngredient.bind(this, {id, ingredient})} />
                           </div>
                           <span>{ingredient.get('name')} ￥{ingredient.get('price')} / 份</span>
                         </li>
