@@ -3,6 +3,7 @@ import { hashHistory } from 'react-router'
 import { getIngredient } from '../../Api/food'
 import ImageLoader from 'react-imageloader'
 import Immutable from 'immutable'
+import Toggle from '../../components/Toggle'
 import _ from 'lodash'
 import './style.styl'
 
@@ -44,6 +45,27 @@ export default React.createClass({
 
     }
   },
+  handleAddIngredient({id, ingredient}, e) {
+    if(e.target.checked) {
+      this.props.addIngredient({
+        foodId: id,
+        ingredient: {
+          id: ingredient.id,
+          name: ingredient.get('name'),
+          price: ingredient.get('price')
+        }
+      })
+    } else {
+      this.props.removeIngredient({
+        foodId: id,
+        ingredient: {
+          id: ingredient.id,
+          name: ingredient.get('name'),
+          price: ingredient.get('price')
+        }
+      })
+    }
+  },
   render() {
     return (
       <ul className="food-list">
@@ -51,7 +73,7 @@ export default React.createClass({
           const id = food.id, name = food.get('name'), desc = food.get('desc'), price = food.get('price'), sold = food.get('sold'), img = food.get('image')
           const _food = _.find(this.props.cart.foods, {id: id})
           const count = _food ? _food.count : 0
-          const isExpand = this.state.isExpandIngredient && this.state.expandNo === id
+          const isExpand = this.state.isExpandIngredient && this.state.expandNo === id && count !== 0
           return (
             <li key={i} className="food-list-item">
               <div className="food-image">
@@ -75,7 +97,7 @@ export default React.createClass({
                   <span>{price}</span>
                 </div>
                 <div className="food-info-ingredient">
-                  <button onClick={this.handleExpandIngredient.bind(this, id)}>
+                  <button  onClick={this.handleExpandIngredient.bind(this, id)}>
                     加料
                     {
                       isExpand ?
@@ -103,11 +125,14 @@ export default React.createClass({
               </div>
               {
                 isExpand ?
-                  <ul className="ingredient-list">
+                  <ul className="ingredient-list" style={{marginTop: this.state.ingredients.length === 0 ? 0 : '0.4rem' }}>
                     {this.state.ingredients.map((ingredient, i) => {
                       return (
-                        <li className="ingredient-iten" key={`ingredient-${i}`}>
-                          {ingredient.get('name')}
+                        <li className="ingredient-item" key={`ingredient-${i}`}>
+                          <div className="ingredient-toggle">
+                            <Toggle onChange={this.handleAddIngredient.bind(this, {id, ingredient})} />
+                          </div>
+                          <span>{ingredient.get('name')} ￥{ingredient.get('price')} / 份</span>
                         </li>
                       )
                     })}

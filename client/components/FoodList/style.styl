@@ -1,3 +1,5 @@
+
+
 .food-list
   list-style none
   padding 0
@@ -9,17 +11,18 @@
   padding 1.2rem .3rem
   min-height 6rem
   border-bottom 1px solid #eee
-  cursor pointer
 
 .food-image
-  float left
+  position relative
   width 9rem
   padding-right 1rem
   img
     width 100%
     border-radius 8px
 .food-info
-  position relative
+  position absolute
+  left 9rem
+  top 1rem
   padding 0 1rem
   div
     margin .2rem
@@ -68,7 +71,12 @@
 
 
 .ingredient-list
-  margin-top .6rem
-  padding .4rem
+  padding 0 .4rem
   .ingredient-item
-    margin .4rem 0
+    padding .4rem 0
+    min-height 2rem
+    line-height 2rem
+    font-size .9rem
+    .ingredient-toggle
+      position absolute
+      right 1rem

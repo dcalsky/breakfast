@@ -60,7 +60,13 @@ class Home extends Component {
     return (
       <div className="home">
         <div className="home-food">
-          <FoodList foods={foods.content} addFood={this.props.handleCart.addFood}  removeFood={this.props.handleCart.removeFood} cart={cart} />
+          <FoodList 
+            foods={foods.content}
+            addFood={this.props.handleCart.addFood}
+            removeFood={this.props.handleCart.removeFood}
+            addIngredient={this.props.handleCart.addIngredient}
+            removeIngredient={this.props.handleCart.removeIngredient}
+            cart={cart} />
         </div>
         <Cart cart={cart} handleSkip={::this.skipToOrder} buttonTitle="选好了" disabled={Object.keys(cart.foods).length === 0}/>
       </div>
