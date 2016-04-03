@@ -60,8 +60,8 @@ export default React.createClass({
       <header className="header">
         {
           this.props.path !== '/' ?
-            <div className="back-button">
-              <i className="fa fa-arrow-left" onClick={this.handleBack}></i>
+            <div className="back-button" onClick={this.handleBack}>
+              <i className="fa fa-chevron-left"></i>返回
             </div>
             :
             null

@@ -31,13 +31,14 @@ class Order extends Component {
       room: user.room,
       floor: user.floor || '西南一',
       mobilePhoneNumber: user.mobilePhoneNumber,
+      note: null,
       name: user.name,
       floors: [],
       timeSlot: [],
       buttonDisabled: false,
       couponId: null,
       couponDiscount: 0,
-      fare: 0.5
+      fare: _.round(this.props.cart.total * 0.1, 1) >= 1 ? 1 : _.round(this.props.cart.total * 0.1, 1) // 运费上限1元, 不超过一元按照订单的10%,
     }
     if(!currentUser) {
       hashHistory.push('/login')
@@ -63,7 +64,7 @@ class Order extends Component {
         let moment1 = moment(), moment2 = moment()
         moment1.set('hour', parseInt(time.get('hours')))
         moment1.set('minute', parseInt(time.get('minutes')))
-        moment1.subtract(30, 'minutes') // 提早30分钟提交订单给制作
+        moment1.subtract(35, 'minutes') // 提早35分钟提交订单给制作
         if(moment1 - moment2 > 0 || this.minStartDay === 1) { // 早于时间档 或者 过了finalTime 就加入
           timeSlot.push(time)
         }
@@ -104,7 +105,7 @@ class Order extends Component {
         buttonDisabled: true
       })
       const total = _.round(this.state.days * cart.total + this.state.fare, 1)
-      createOrder(total, cart.foods, this.state.startDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, this.state.couponId, this.state.couponDiscount, result => {
+      createOrder(total, cart.foods, this.state.startDate,  this.state.floor, this.state.room, this.state.name, this.state.mobilePhoneNumber, this.state.note, this.state.couponId, this.state.couponDiscount, result => {
         this.props.handleOrder.createOrder({id: result.id, total: result.total})
         if(result.total === 0 ) {
           hashHistory.push({pathname: '/result', query: {result: true}})
@@ -149,6 +150,9 @@ class Order extends Component {
       case 'room':
         this.setState({room: value})
         break
+      case 'note':
+        this.setState({note: value})
+        break
     }
   }
   handleSelectCoupon(e) {
@@ -182,6 +186,10 @@ class Order extends Component {
           <li className="room">
             <span>房间号</span>
             <input type="text" placeholder="房间号" onChange={this.handleChangeInput.bind(this, 'room')}/>
+          </li>
+          <li className="note">
+            <span>备注</span>
+            <input type="text" placeholder="口味 配料放哪份" onChange={this.handleChangeInput.bind(this, 'note')}/>
           </li>
         </ul>
 
@@ -301,18 +309,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Order)
-
-
-/*<li className="order-date-item">
- <span>结束时间</span>
- <DatePicker
- className="order-end-date"
- selected={this.state.endDate}
- startDate={this.state.startDate}
- endDate={this.state.endDate}
- minDate={moment().add(this.minStartDay, 'days')}
- onChange={::this.handleChangeEnd}
- popoverAttachment='top center'
- popoverTargetAttachment='bottom center'
- popoverTargetOffset='0px -80px'/>
- </li>*/

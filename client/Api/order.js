@@ -11,7 +11,7 @@ export const getOrderDetail = orderId => {
   return query_detail.find()
 }
 
-export const createOrder = (total, foods, startDate, floor, room, name, phone, couponId, discount, callback) => {
+export const createOrder = (total, foods, startDate, floor, room, name, phone, note, couponId, discount, callback) => {
   let order = new Order()
   let user = AV.User.current()
   order.set('total', total)
@@ -20,6 +20,7 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, c
   order.set('room', room)
   order.set('name', name)
   order.set('phone', phone)
+  order.set('note', note)
   order.set('startDate', startDate.second(0).toDate())
   if(couponId) {
     let coupon = new Coupon()
