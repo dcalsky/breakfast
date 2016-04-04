@@ -1,7 +1,33 @@
 import AV from 'avoscloud-sdk'
 import _ from 'lodash'
-import { Order, Food, OrderDetail, Coupon, CouponDetail } from './init'
+import { Order, Food, OrderDetail, Coupon, CouponDetail, Ingredient } from './init'
 // todo[1]: all mistakes should be added
+
+
+const saveFoods = (foods, order) => {
+  foods.map(element => {
+    let detail = new OrderDetail()
+    let food = new Food()
+    let ingredient_relation = detail.relation('ingredients')
+    food.id = element.id
+    new AV.Query('Food').get(food.id).then(_food => {
+      const sold = _food.get('sold')
+      food.set('sold', parseInt(sold) + element.count)
+      detail.set('name', _food.get('name'))
+      detail.set('food', food)
+      detail.set('count', element.count)
+      detail.set('order', order)
+      element.ingredients.map(ingredient => {
+        let _ingredient = new Ingredient()
+        _ingredient.id = ingredient.id
+        ingredient_relation.add(_ingredient)
+      })
+      detail.save().then(() => {
+        console.log('detail completed')
+      })
+    });
+  })
+}
 
 export const getOrderDetail = orderId => {
   let order = new Order()
@@ -35,7 +61,7 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, n
         relation.remove(coupon)
         couponDetail.set('coupon', coupon)
         couponDetail.set('user', user)
-        couponDetail.save().then(result => {
+        couponDetail.save().then(() => {
           const finalTotal = _.round(total - discount, 1) <= 0 ? 0 : total - discount
           order.set('discount', discount)
           if(finalTotal === 0) {
@@ -43,22 +69,7 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, n
           }
           coupon.set('number', couponNumber - 1)
           coupon.save().then(() => {
-            foods.map(element => {
-              let detail = new OrderDetail()
-              let food = new Food()
-              food.id = element.id
-              new AV.Query('Food').get(food.id).then(_food => {
-                const sold = _food.get('sold')
-                food.set('sold', parseInt(sold) + element.count)
-                detail.set('name', _food.get('name'))
-                detail.set('food', food)
-                detail.set('count', element.count)
-                detail.set('order', order)
-                detail.save().then(() => {
-                  console.log('detail completed')
-                })
-              });
-            })
+            saveFoods(foods, order)
             order.save().then(result => {
               if(result.id) {
                 user.set('name', name)
@@ -74,22 +85,7 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, n
       }
     })
   } else {
-    foods.map(element => {
-      let detail = new OrderDetail()
-      let food = new Food()
-      food.id = element.id
-      new AV.Query('Food').get(food.id).then(_food => {
-        const sold = _food.get('sold')
-        food.set('sold', parseInt(sold) + element.count)
-        detail.set('name', _food.get('name'))
-        detail.set('food', food)
-        detail.set('count', element.count)
-        detail.set('order', order)
-        detail.save().then(() => {
-          console.log('detail completed')
-        })
-      });
-    })
+    saveFoods(foods, order)
     order.save().then(result => {
       if(result.id) {
         user.set('name', name)
@@ -99,16 +95,4 @@ export const createOrder = (total, foods, startDate, floor, room, name, phone, n
       }
     })
   }
-
-
 }
-
-
-//request
-//  .post('http://localhost:3000/pay')
-//  .type('form')
-//  .send({out_trade_no: result.id, subject: '食物订单', seller_id: '2088221435928705', total_fee: total, body: '普通食物订单', show_url: '1'})
-//  .end((err, resp) => {
-//    var aliWindow = window.open("", "_self");
-//    aliWindow.document.write(resp.text);
-//  })

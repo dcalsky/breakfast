@@ -37,6 +37,6 @@ export const getUserInfo = (user) => {
   return query_order.find()
 }
 
-export const logout = () => {
-  // logout
-}
+// export const logout = () => {
+//   // logout
+// }

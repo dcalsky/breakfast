@@ -8,9 +8,9 @@ export const getFoods = (type) => {
   return query.find()
 }
 
-export const getTypes = () => {
-  return new AV.Query('Type').find()
-}
+// export const getTypes = () => {
+//   return new AV.Query('Type').find()
+// }
 
 export const getIngredient = foodId => {
   let query = new AV.Query('Ingredient')

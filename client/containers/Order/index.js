@@ -252,9 +252,23 @@ class Order extends Component {
         <ul className="order-amount">
           {cart.foods.map((food, i) => {
             return (
-              <li className="order-cart-item" key={`cart-${i}`}>
-                <span>{food.name}</span>
-                <span style={{float: 'right'}}>{food.count} 份</span>
+              <li  key={`cart-${i}`}>
+                <ul>
+                  <li className="order-cart-item">
+                    <span>{food.name}</span>
+                    <span style={{float: 'right'}}>{food.count} 份</span>
+                  </li>
+                  {
+                    food.ingredients.map((ingredient, i) => {
+                      return (
+                        <li className="order-cart-item" key={`order-ingredient-${i}`}>
+                          <span>{ingredient.name}</span>
+                          <span style={{float: 'right'}}>1 份</span>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
               </li>
             )
           })}
