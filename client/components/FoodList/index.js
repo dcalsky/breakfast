@@ -128,7 +128,6 @@ export default React.createClass({
                   <ul className="ingredient-list" style={{marginTop: this.state.ingredients.length === 0 ? 0 : '0.4rem' }}>
                     {this.state.ingredients.map((ingredient, i) => {
                       const toggleChecked = _.find(_food.ingredients, {id: ingredient.id}) ? true : false
-                      console.log(toggleChecked)
                       return (
                         <li className="ingredient-item" key={`ingredient-${i}`}>
                           <div className="ingredient-toggle">

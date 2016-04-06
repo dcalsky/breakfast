@@ -59,7 +59,6 @@ export default handleActions({
     } else {
       let preFoods = state.get('foods').toJS()
       preFoods[i].ingredients = preFoods[i].ingredients.filter(ingredient => ingredient.id !== action.payload.ingredient.id)
-      console.log(preFoods[i].ingredients)
       return state.merge({
         count: state.get('count'),
         foods: Immutable.fromJS(preFoods),

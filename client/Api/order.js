@@ -3,6 +3,14 @@ import _ from 'lodash'
 import { Order, Food, OrderDetail, Coupon, CouponDetail, Ingredient } from './init'
 // todo[1]: all mistakes should be added
 
+const getIngredientName = (ingredients) => {
+  let array = []
+  ingredients.map(ingredient => {
+    array.push(ingredient.name)
+  })
+  console.log(array)
+  return array
+}
 
 const saveFoods = (foods, order) => {
   foods.map(element => {
@@ -17,6 +25,7 @@ const saveFoods = (foods, order) => {
       detail.set('food', food)
       detail.set('count', element.count)
       detail.set('order', order)
+      detail.set('ingredientArray', getIngredientName(element.ingredients))
       element.ingredients.map(ingredient => {
         let _ingredient = new Ingredient()
         _ingredient.id = ingredient.id

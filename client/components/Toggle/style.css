@@ -11,7 +11,7 @@
     background: none;
 }
 .tgl + .tgl-btn {
-    outline: 0;
+    outline: none;
     display: block;
     width: 4em;
     height: 2em;
@@ -40,14 +40,15 @@
 }
 
 .tgl-ios + .tgl-btn {
-    background: #fbfbfb;
+    outline: none;
+    background: #ebebeb;
     border-radius: 2em;
-    padding: 2px;
     -webkit-transition: all .4s ease;
     transition: all .4s ease;
     border: 1px solid #e8eae9;
 }
 .tgl-ios + .tgl-btn:after {
+    outline: none;
     border-radius: 2em;
     background: #fbfbfb;
     -webkit-transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
